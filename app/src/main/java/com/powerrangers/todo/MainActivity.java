@@ -1,6 +1,7 @@
 package com.powerrangers.todo;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,6 +14,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -41,6 +46,23 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
+        // generate some dummy content
+        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.task_container);
+
+        for (int i=0; i<100; i++) {
+          TextView textView = new TextView(this);
+          textView.setLayoutParams(new LinearLayout.LayoutParams(
+              LinearLayout.LayoutParams.WRAP_CONTENT,
+              LinearLayout.LayoutParams.WRAP_CONTENT));
+          textView.setText("programmatically created TextView" + i);
+          Random rnd = new Random();
+          int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+          textView.setBackgroundColor(color);
+          textView.setPadding(20, 20, 20, 20);// in pixels (left, top, right, bottom)
+          linearLayout.addView(textView);
+        }
     }
 
     @Override
