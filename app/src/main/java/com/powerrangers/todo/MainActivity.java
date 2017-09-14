@@ -14,13 +14,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    MyExpandableListAdapter listAdaptor;
+    ExpandableListView listView;
+    List<String> listDataHeaders;
+    HashMap<String, List<String>> listDataChildren;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,22 +56,11 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
-        // generate some dummy content
-        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.task_container);
-
-        for (int i=0; i<100; i++) {
-          TextView textView = new TextView(this);
-          textView.setLayoutParams(new LinearLayout.LayoutParams(
-              LinearLayout.LayoutParams.WRAP_CONTENT,
-              LinearLayout.LayoutParams.WRAP_CONTENT));
-          textView.setText("programmatically created TextView" + i);
-          Random rnd = new Random();
-          int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-          textView.setBackgroundColor(color);
-          textView.setPadding(20, 20, 20, 20);// in pixels (left, top, right, bottom)
-          linearLayout.addView(textView);
-        }
+        // expandable list stuff
+        listView = (ExpandableListView) findViewById(R.id.task_list);
+        prepareListData();
+        listAdaptor = new MyExpandableListAdapter(this, listDataHeaders, listDataChildren);
+        listView.setAdapter(listAdaptor);
     }
 
     @Override
@@ -122,5 +120,31 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+
+    private void prepareListData () {
+      listDataHeaders = new ArrayList<String>();
+      listDataChildren = new HashMap<String, List<String>>();
+
+      // adding child data
+      listDataHeaders.add("Today");
+      listDataHeaders.add("Wednesday, November 12");
+      listDataHeaders.add("Thursday, November 13");
+
+      List<String> taskList1 = new ArrayList<String>();
+      taskList1.add("task1");
+      taskList1.add("task2");
+      List<String> taskList2 = new ArrayList<String>();
+      taskList2.add("task3");
+      taskList2.add("task4");
+      List<String> taskList3 = new ArrayList<String>();
+      for (int i=0; i<30; i++) {
+        taskList3.add("task" + (5+i));
+      }
+
+      listDataChildren.put(listDataHeaders.get(0), taskList1);
+      listDataChildren.put(listDataHeaders.get(1), taskList2);
+      listDataChildren.put(listDataHeaders.get(2), taskList3);
     }
 }
