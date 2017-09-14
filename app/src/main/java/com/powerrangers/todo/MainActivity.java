@@ -136,12 +136,12 @@ public class MainActivity extends AppCompatActivity
       taskList1.add("task1");
       taskList1.add("task2");
       List<String> taskList2 = new ArrayList<String>();
-      taskList2.add("task3");
-      taskList2.add("task4");
-      List<String> taskList3 = new ArrayList<String>();
       for (int i=0; i<30; i++) {
-        taskList3.add("task" + (5+i));
+        taskList2.add("task" + (5+i));
       }
+      List<String> taskList3 = new ArrayList<String>();
+      taskList3.add("task3");
+      taskList3.add("task4");
 
       listDataChildren.put(listDataHeaders.get(0), taskList1);
       listDataChildren.put(listDataHeaders.get(1), taskList2);
