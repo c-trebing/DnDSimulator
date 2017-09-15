@@ -4,14 +4,19 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
+import com.powerrangers.todo.MainActivity;
+
 public class MyExpandableListAdapter extends BaseExpandableListAdapter {
+    public final static String EXTRA_MESSAGE = "";
 
     private Context _context;
     private List<String> _listDataHeader; // header titles
@@ -52,6 +57,20 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
                 .findViewById(R.id.lblListItem);
 
         txtListChild.setText(childText);
+
+        txtListChild.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+              // Intent intent = new Intent(MyExpandableListAdapter.this._context, EditTask.class);
+              Context context = v.getContext();
+              Intent intent = new Intent(context, EditTask.class);
+              TextView text = (TextView)v;
+              String message = text.getText().toString();
+              intent.putExtra(EXTRA_MESSAGE, message);
+              context.startActivity(intent);
+            }
+        });
+
         return convertView;
     }
 
