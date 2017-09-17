@@ -14,11 +14,14 @@ public class CreateTaskActivity extends AppCompatActivity {
     }
 
     public void submitCreateTask (View view) {
-        EditText editText = (EditText) findViewById(R.id.create_task_name_input);
-        String name = editText.getText().toString();
+        EditText nameInput = (EditText) findViewById(R.id.create_task_name_input);
+        EditText dayInput = (EditText) findViewById(R.id.create_task_day_input);
+        String name = nameInput.getText().toString();
+        String day = dayInput.getText().toString();
 
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("CREATE_TASK_NAME", name);
+        intent.putExtra("CREATE_TASK_DAY", day);
         setResult(200, intent);
         finish();
     }
