@@ -118,7 +118,7 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
         return true;
     }
 
-    public void setNewItems(List<String> listDataHeader,HashMap<String, List<String>> listChildData) {
+    public void setNewItems(List<String> listDataHeader, HashMap<String, List<String>> listChildData) {
       this._listDataHeader = listDataHeader;
       this._listDataChild = listChildData;
       notifyDataSetChanged();

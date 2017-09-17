@@ -63,11 +63,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        // expandable list stuff
-        listView = (ExpandableListView) findViewById(R.id.task_list);
         prepareListData();
-        listAdaptor = new MyExpandableListAdapter(this, listDataHeaders, listDataChildren);
-        listView.setAdapter(listAdaptor);
     }
 
     @Override
@@ -84,10 +80,17 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onActivityResult (int requestCode, int resultCode, Intent intent) {
       if (resultCode == 200 && requestCode == 100) {
-        if (intent.hasExtra("CREATE_TASK_NAME")) {
-          String taskName = intent.getStringExtra("CREATE_TASK_NAME");
-          Log.d("test", taskName);
+        String taskName = intent.getStringExtra("CREATE_TASK_NAME");
+        String taskDay = intent.getStringExtra("CREATE_TASK_DAY");
+
+        // if it doesnt exist, create it
+        if (listDataHeaders.indexOf(taskDay) == -1) {
+          listDataHeaders.add(taskDay);
+          listDataChildren.put(taskDay, new ArrayList<String>());
         }
+
+        listDataChildren.get(taskDay).add(taskName);
+        listAdaptor.setNewItems(listDataHeaders, listDataChildren);
       }
     }
 
@@ -171,8 +174,13 @@ public class MainActivity extends AppCompatActivity
       taskList3.add("task3");
       taskList3.add("task4");
 
-      listDataChildren.put(listDataHeaders.get(0), taskList1);
+      listDataChildren.put("Today", taskList1);
       listDataChildren.put(listDataHeaders.get(1), taskList2);
       listDataChildren.put(listDataHeaders.get(2), taskList3);
+
+
+      listAdaptor = new MyExpandableListAdapter(this, listDataHeaders, listDataChildren);
+      listView = (ExpandableListView) findViewById(R.id.task_list);
+      listView.setAdapter(listAdaptor);
     }
 }

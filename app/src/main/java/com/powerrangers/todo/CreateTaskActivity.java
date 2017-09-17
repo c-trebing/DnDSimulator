@@ -19,6 +19,7 @@ public class CreateTaskActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("CREATE_TASK_NAME", name);
+        intent.putExtra("CREATE_TASK_DAY", "Today");
         setResult(200, intent);
         finish();
     }
