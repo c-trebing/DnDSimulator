@@ -66,7 +66,12 @@ public class MainActivity extends AppCompatActivity
         prepareListData();
         listAdaptor = new MyExpandableListAdapter(this, listDataHeaders, listDataChildren);
         listView.setAdapter(listAdaptor);
-        
+    }
+
+    @Override
+    public void onResume () {
+        super.onResume();
+
         // expand groups by default
         int count = listAdaptor.getGroupCount();
         for (int i=0; i<count; i++) {
