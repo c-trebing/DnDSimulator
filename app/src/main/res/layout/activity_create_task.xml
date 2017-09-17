@@ -4,6 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="50dp"
     tools:context="com.powerrangers.todo.CreateTaskActivity">
+
+    <EditText
+        android:id="@+id/create_task_name_input"
+        android:layout_width="548dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/create_task_name_hint"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/create_task_submit"
+        android:onClick="submitCreateTask"
+        android:layout_marginRight="0dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="302dp" />
 
 </android.support.constraint.ConstraintLayout>

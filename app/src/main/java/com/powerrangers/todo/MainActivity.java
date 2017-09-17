@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity
                 //         .setAction("Action", null).show();
                 Context context = view.getContext();
                 Intent intent = new Intent(context, CreateTaskActivity.class);
-                context.startActivity(intent);
+                startActivityForResult(intent, 100);
             }
         });
 
@@ -65,6 +66,16 @@ public class MainActivity extends AppCompatActivity
         prepareListData();
         listAdaptor = new MyExpandableListAdapter(this, listDataHeaders, listDataChildren);
         listView.setAdapter(listAdaptor);
+    }
+
+    @Override
+    public void onActivityResult (int requestCode, int resultCode, Intent intent) {
+      if (resultCode == 200 && requestCode == 100) {
+        if (intent.hasExtra("CREATE_TASK_NAME")) {
+          String taskName = intent.getStringExtra("CREATE_TASK_NAME");
+          Log.d("test", taskName);
+        }
+      }
     }
 
     @Override
