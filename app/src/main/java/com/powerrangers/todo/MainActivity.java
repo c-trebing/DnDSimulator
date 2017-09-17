@@ -28,6 +28,8 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    List<Task> tasks = new ArrayList<Task>();
+
     MyExpandableListAdapter listAdaptor;
     ExpandableListView listView;
     List<String> listDataHeaders;
