@@ -14,7 +14,7 @@ public class CreateTaskActivity extends AppCompatActivity
     implements DatePickerFragment.TheListener {
     // UI references.
     private EditText nameInput;
-    private EditText dayInput;
+    private EditText dateInput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,9 +22,9 @@ public class CreateTaskActivity extends AppCompatActivity
         setContentView(R.layout.activity_create_task);
 
         nameInput = (EditText) findViewById(R.id.create_task_name_input);
-        dayInput = (EditText) findViewById(R.id.create_task_day_input);
+        dateInput = (EditText) findViewById(R.id.create_task_date_input);
 
-        dayInput.setOnClickListener (new View.OnClickListener() {
+        dateInput.setOnClickListener (new View.OnClickListener() {
           @Override
           public void onClick (View arg0) {
             DialogFragment picker = new DatePickerFragment();
@@ -41,12 +41,12 @@ public class CreateTaskActivity extends AppCompatActivity
 
     @Override
     public void returnDate (String date) {
-        dayInput.setText(date);
+        dateInput.setText(date);
     }
 
     public void submitCreateTask (View view) {
         String name = nameInput.getText().toString();
-        String day = dayInput.getText().toString();
+        String date = dateInput.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -57,9 +57,9 @@ public class CreateTaskActivity extends AppCompatActivity
             focusView = nameInput;
             cancel = true;
         }
-        else if (TextUtils.isEmpty(day)) {
-            dayInput.setError(getString(R.string.error_field_required));
-            focusView = dayInput;
+        else if (TextUtils.isEmpty(date)) {
+            dateInput.setError(getString(R.string.error_field_required));
+            focusView = dateInput;
             cancel = true;
         }
 
@@ -68,7 +68,7 @@ public class CreateTaskActivity extends AppCompatActivity
         } else {
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra("CREATE_TASK_NAME", name);
-            intent.putExtra("CREATE_TASK_DAY", day);
+            intent.putExtra("CREATE_TASK_DATE", date);
             setResult(200, intent);
             finish();
         }
