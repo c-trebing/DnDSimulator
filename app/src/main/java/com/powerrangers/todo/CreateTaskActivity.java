@@ -1,13 +1,17 @@
 package com.powerrangers.todo;
 
+import android.app.DialogFragment;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 
-public class CreateTaskActivity extends AppCompatActivity {
+public class CreateTaskActivity extends AppCompatActivity
+    implements DatePickerFragment.TheListener {
     // UI references.
     private EditText nameInput;
     private EditText dayInput;
@@ -19,6 +23,25 @@ public class CreateTaskActivity extends AppCompatActivity {
 
         nameInput = (EditText) findViewById(R.id.create_task_name_input);
         dayInput = (EditText) findViewById(R.id.create_task_day_input);
+
+        dayInput.setOnClickListener (new View.OnClickListener() {
+          @Override
+          public void onClick (View arg0) {
+            DialogFragment picker = new DatePickerFragment();
+            picker.show(getFragmentManager(), "datePicker");
+          }
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu (Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public void returnDate (String date) {
+        dayInput.setText(date);
     }
 
     public void submitCreateTask (View view) {
