@@ -16,8 +16,7 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
     public final static String EXTRA_MESSAGE = "";
 
     private Context _context;
-    private List<String> _listDataHeader; // header titles
-    // child data in format of header title, child title
+    private List<String> _listDataHeader;
     private HashMap<String, List<String>> _listDataChild;
 
     public MyExpandableListAdapter(Context context, List<String> listDataHeader,
@@ -58,7 +57,6 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
         txtListChild.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              // Intent intent = new Intent(MyExpandableListAdapter.this._context, EditTaskActivity.class);
               Context context = v.getContext();
               Intent intent = new Intent(context, EditTaskActivity.class);
               TextView text = (TextView)v;
@@ -118,5 +116,11 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
+    }
+
+    public void setNewItems(List<String> listDataHeader,HashMap<String, List<String>> listChildData) {
+      this._listDataHeader = listDataHeader;
+      this._listDataChild = listChildData;
+      notifyDataSetChanged();
     }
 }
