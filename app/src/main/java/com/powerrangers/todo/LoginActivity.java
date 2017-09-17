@@ -178,6 +178,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             cancel = true;
         }
 
+        cancel = false;
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
@@ -311,7 +312,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             try {
                 // Simulate network access.
-                Thread.sleep(2000);
+                Thread.sleep(2);
             } catch (InterruptedException e) {
                 return false;
             }
