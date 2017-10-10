@@ -1,9 +1,5 @@
 package com.powerrangers.todo;
 
-/**
- * Created by Brendan on 10/10/2017.
- */
-
 public class Group {
     public String group_name;
     public String group_owner;
