@@ -10,6 +10,5 @@ public class Group {
         group_owner = owner;
         group_id = 0;
     }
-
     // getters and setters below
 }
