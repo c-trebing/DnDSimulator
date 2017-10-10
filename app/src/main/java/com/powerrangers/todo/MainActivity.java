@@ -81,15 +81,15 @@ public class MainActivity extends AppCompatActivity
     public void onActivityResult (int requestCode, int resultCode, Intent intent) {
       if (resultCode == 200 && requestCode == 100) {
         String taskName = intent.getStringExtra("CREATE_TASK_NAME");
-        String taskDay = intent.getStringExtra("CREATE_TASK_DAY");
+        String taskDate = intent.getStringExtra("CREATE_TASK_DATE");
 
         // if it doesnt exist, create it
-        if (listDataHeaders.indexOf(taskDay) == -1) {
-          listDataHeaders.add(taskDay);
-          listDataChildren.put(taskDay, new ArrayList<String>());
+        if (listDataHeaders.indexOf(taskDate) == -1) {
+          listDataHeaders.add(taskDate);
+          listDataChildren.put(taskDate, new ArrayList<String>());
         }
 
-        listDataChildren.get(taskDay).add(taskName);
+        listDataChildren.get(taskDate).add(taskName);
         listAdaptor.setNewItems(listDataHeaders, listDataChildren);
       }
     }

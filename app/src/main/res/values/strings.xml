@@ -30,7 +30,7 @@
 
     <!-- Strings related to Create Task -->
     <string name="create_task_name_hint">Task Name</string>
-    <string name="create_task_day_hint">Task Day</string>
+    <string name="create_task_date_hint">Task Date</string>
     <string name="create_task_submit">Create Task</string>
 
     <!-- Example General settings -->
