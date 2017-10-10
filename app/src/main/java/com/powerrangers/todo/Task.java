@@ -1,11 +1,13 @@
 package com.powerrangers.todo;
 
-public class Task {
-  public String name;
-  public String day;
+import java.io.Serializable;
 
-  public Task (String iname, String iday) {
+public class Task implements Serializable {
+  public String name;
+  public String date;
+
+  public Task (String iname, String idate) {
     name = iname;
-    day = iday;   // temporary!
+    date = idate;
   }
 }

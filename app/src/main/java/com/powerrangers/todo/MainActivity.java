@@ -20,6 +20,7 @@ import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -80,16 +81,15 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onActivityResult (int requestCode, int resultCode, Intent intent) {
       if (resultCode == 200 && requestCode == 100) {
-        String taskName = intent.getStringExtra("CREATE_TASK_NAME");
-        String taskDate = intent.getStringExtra("CREATE_TASK_DATE");
+        Task task = (Task)intent.getSerializableExtra("CREATED_TASK");
 
         // if it doesnt exist, create it
-        if (listDataHeaders.indexOf(taskDate) == -1) {
-          listDataHeaders.add(taskDate);
-          listDataChildren.put(taskDate, new ArrayList<String>());
+        if (listDataHeaders.indexOf(task.date) == -1) {
+          listDataHeaders.add(task.date);
+          listDataChildren.put(task.date, new ArrayList<String>());
         }
 
-        listDataChildren.get(taskDate).add(taskName);
+        listDataChildren.get(task.date).add(task.name);
         listAdaptor.setNewItems(listDataHeaders, listDataChildren);
       }
     }

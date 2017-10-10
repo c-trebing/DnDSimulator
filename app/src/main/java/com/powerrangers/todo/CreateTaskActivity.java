@@ -66,9 +66,9 @@ public class CreateTaskActivity extends AppCompatActivity
         if (cancel) {
             focusView.requestFocus();
         } else {
+            Task task = new Task(name, date);
             Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("CREATE_TASK_NAME", name);
-            intent.putExtra("CREATE_TASK_DATE", date);
+            intent.putExtra("CREATED_TASK", task);
             setResult(200, intent);
             finish();
         }
