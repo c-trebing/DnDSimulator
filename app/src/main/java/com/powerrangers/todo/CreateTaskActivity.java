@@ -21,6 +21,23 @@ public class CreateTaskActivity extends AppCompatActivity
     private EditText timeInput;
     private Task newTask;
 
+    private boolean validateInput (String name, String date, String time) {
+        if (TextUtils.isEmpty(name)) {
+            nameInput.setError(getString(R.string.error_field_required));
+            nameInput.requestFocus();
+        }
+        else if (TextUtils.isEmpty(date)) {
+            dateInput.setError(getString(R.string.error_field_required));
+            dateInput.requestFocus();
+        }
+        else if (TextUtils.isEmpty(time)) {
+            timeInput.setError(getString(R.string.error_field_required));
+            timeInput.requestFocus();
+        }
+        else { return true; }
+        return false;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,29 +93,7 @@ public class CreateTaskActivity extends AppCompatActivity
         String date = dateInput.getText().toString();
         String time = timeInput.getText().toString();
 
-        boolean cancel = false;
-        View focusView = null;
-
-        // validation
-        if (TextUtils.isEmpty(name)) {
-            nameInput.setError(getString(R.string.error_field_required));
-            focusView = nameInput;
-            cancel = true;
-        }
-        else if (TextUtils.isEmpty(date)) {
-            dateInput.setError(getString(R.string.error_field_required));
-            focusView = dateInput;
-            cancel = true;
-        }
-        else if (TextUtils.isEmpty(time)) {
-            timeInput.setError(getString(R.string.error_field_required));
-            focusView = timeInput;
-            cancel = true;
-        }
-
-        if (cancel) {
-            focusView.requestFocus();
-        } else {
+        if (validateInput(name, date, time)) {
             Task task = new Task(name, date);
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra("CREATED_TASK", task);
