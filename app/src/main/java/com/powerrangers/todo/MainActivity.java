@@ -29,7 +29,7 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    List<Task> tasks = new ArrayList<Task>();
+    List<Task> tasks;
 
     MyExpandableListAdapter listAdaptor;
     ExpandableListView listView;
@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        tasks = new ArrayList<Task>();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -82,15 +84,7 @@ public class MainActivity extends AppCompatActivity
     public void onActivityResult (int requestCode, int resultCode, Intent intent) {
       if (resultCode == 200 && requestCode == 100) {
         Task task = (Task)intent.getSerializableExtra("CREATED_TASK");
-
-        // if it doesnt exist, create it
-        if (listDataHeaders.indexOf(task.date) == -1) {
-          listDataHeaders.add(task.date);
-          listDataChildren.put(task.date, new ArrayList<String>());
-        }
-
-        listDataChildren.get(task.date).add(task.name);
-        listAdaptor.setNewItems(listDataHeaders, listDataChildren);
+        addTask(task);
       }
     }
 
@@ -153,6 +147,18 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    private void addTask (Task task) {
+      tasks.add( new Task("name", "date") );
+
+      // if it doesnt exist, create it
+      if (listDataHeaders.indexOf(task.date) == -1) {
+        listDataHeaders.add(task.date);
+        listDataChildren.put(task.date, new ArrayList<String>());
+      }
+
+      listDataChildren.get(task.date).add(task.name);
+      listAdaptor.setNewItems(listDataHeaders, listDataChildren);
+    }
 
     private void prepareListData () {
       listDataHeaders = new ArrayList<String>();
