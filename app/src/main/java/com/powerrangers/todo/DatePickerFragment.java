@@ -1,10 +1,10 @@
 package com.powerrangers.todo;
 
-
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.DatePicker;
 
 import java.text.SimpleDateFormat;
@@ -13,9 +13,9 @@ import java.util.Calendar;
 public class DatePickerFragment extends DialogFragment
     implements DatePickerDialog.OnDateSetListener {
 
-    TheListener listener;
+    DatePickedListener listener;
 
-    public interface TheListener {
+    public interface DatePickedListener {
         public void returnDate (String date);
     }
 
@@ -26,13 +26,12 @@ public class DatePickerFragment extends DialogFragment
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
-        listener = (TheListener) getActivity();
+        listener = (DatePickedListener) getActivity();
 
         // Create a new instance of DatePickerDialog and return it
         return new DatePickerDialog(getActivity(), this, year, month, day);
     }
 
-    @Override
     public void onDateSet(DatePicker view, int year, int month, int day) {
       Calendar c = Calendar.getInstance();
       c.set(year, month, day);
