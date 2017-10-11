@@ -21,7 +21,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -38,8 +40,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        tasks = new ArrayList<Task>();
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -66,7 +66,15 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        prepareListData();
+        tasks = new ArrayList<Task>();
+        listDataHeaders = new ArrayList<String>();
+        listDataChildren = new HashMap<String, List<String>>();
+
+        listAdaptor = new MyExpandableListAdapter(this, listDataHeaders, listDataChildren);
+        listView = (ExpandableListView) findViewById(R.id.task_list);
+        listView.setAdapter(listAdaptor);
+
+        prepareMockData();
     }
 
     @Override
@@ -160,33 +168,13 @@ public class MainActivity extends AppCompatActivity
       listAdaptor.setNewItems(listDataHeaders, listDataChildren);
     }
 
-    private void prepareListData () {
-      listDataHeaders = new ArrayList<String>();
-      listDataChildren = new HashMap<String, List<String>>();
-
-      // adding child data
-      listDataHeaders.add("Today");
-      listDataHeaders.add("Wednesday, November 12");
-      listDataHeaders.add("Thursday, November 13");
-
-      List<String> taskList1 = new ArrayList<String>();
-      taskList1.add("task1");
-      taskList1.add("task2");
-      List<String> taskList2 = new ArrayList<String>();
-      for (int i=0; i<30; i++) {
-        taskList2.add("task" + (5+i));
+    private void prepareMockData () {
+      SimpleDateFormat sdf = new SimpleDateFormat("EEEE, MMM d");
+      Date today = new Date();
+      Date tomorrow = new Date(today.getTime() + (1000 * 60 * 60 * 24));
+      addTask( new Task("panic about tomorrow", sdf.format(today)) );
+      for (int i=1; i<100; i++) {
+        addTask( new Task("problem " + i, sdf.format(tomorrow)) );
       }
-      List<String> taskList3 = new ArrayList<String>();
-      taskList3.add("task3");
-      taskList3.add("task4");
-
-      listDataChildren.put("Today", taskList1);
-      listDataChildren.put(listDataHeaders.get(1), taskList2);
-      listDataChildren.put(listDataHeaders.get(2), taskList3);
-
-
-      listAdaptor = new MyExpandableListAdapter(this, listDataHeaders, listDataChildren);
-      listView = (ExpandableListView) findViewById(R.id.task_list);
-      listView.setAdapter(listAdaptor);
     }
 }
