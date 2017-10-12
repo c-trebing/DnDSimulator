@@ -45,9 +45,9 @@ public class MainActivity extends AppCompatActivity
     List<String> listDataHeaders;
     HashMap<String, List<String>> listDataChildren;
 
-    /*********test of firebase********/
+    /*********Addition of firebase********/
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    /*********test of firebase********/
+    /*********Addition of firebase********/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +85,9 @@ public class MainActivity extends AppCompatActivity
         listView = (ExpandableListView) findViewById(R.id.task_list);
         listView.setAdapter(listAdaptor);
 
+        /**Going to add task from firebase to here**/
+
+        /** Finished adding task to firebase upon startup**/
         prepareMockData();
     }
 
