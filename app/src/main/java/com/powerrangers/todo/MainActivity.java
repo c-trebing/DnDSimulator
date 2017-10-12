@@ -107,11 +107,6 @@ public class MainActivity extends AppCompatActivity
         sortTasks();
         updateDisplayedTasks();
 
-          /*********test of firebase********/
-          SimpleDateFormat taskFormat = new SimpleDateFormat("EEEE, MMM d @ hh:mm a  -  ");
-          String header = taskFormat.format(task.calendar.getTime());
-          DatabaseReference myRef = database.getReference(header);
-          myRef.setValue(task.name);
       }
     }
 
@@ -175,7 +170,13 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void addTask (Task task) {
-      tasks.add( task );
+        tasks.add( task );
+
+        /** Update Firebase with new information upon addTask**/
+        SimpleDateFormat taskFormat = new SimpleDateFormat("EEEE, MMM d @ hh:mm a  -  ");
+        String header = taskFormat.format(task.calendar.getTime());
+        DatabaseReference myRef = database.getReference(header);
+        myRef.setValue(task.name);
     }
 
     private void sortTasks () {
