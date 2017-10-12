@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity
 
     /*********test of firebase********/
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference("message");
     /*********test of firebase********/
 
     @Override
@@ -109,8 +108,10 @@ public class MainActivity extends AppCompatActivity
         updateDisplayedTasks();
 
           /*********test of firebase********/
+          SimpleDateFormat taskFormat = new SimpleDateFormat("EEEE, MMM d @ hh:mm a  -  ");
+          String header = taskFormat.format(task.calendar.getTime());
+          DatabaseReference myRef = database.getReference(header);
           myRef.setValue(task.name);
-          /*********test of firebase********/
       }
     }
 
