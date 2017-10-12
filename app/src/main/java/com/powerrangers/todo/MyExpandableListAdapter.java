@@ -1,5 +1,6 @@
 package com.powerrangers.todo;
 
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 
@@ -41,8 +42,10 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, final int childPosition,
             boolean isLastChild, View convertView, ViewGroup parent) {
 
+        SimpleDateFormat taskEntryFormat = new SimpleDateFormat("hh:mm a  -  ");
         Task child = (Task) getChild(groupPosition, childPosition);
-        final String childText = child.name;
+        String time = taskEntryFormat.format(child.calendar.getTime());
+        String childText = time + child.name;
 
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context

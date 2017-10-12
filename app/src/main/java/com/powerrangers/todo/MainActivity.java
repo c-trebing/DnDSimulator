@@ -190,7 +190,6 @@ public class MainActivity extends AppCompatActivity
 
     private void updateDisplayedTasks () {
       SimpleDateFormat taskHeaderFormat = new SimpleDateFormat("EEEE, MMM d");
-      SimpleDateFormat taskEntryFormat = new SimpleDateFormat("hh:mm a  -  ");
 
       // Kinda naive to tear it down and rebuild it at every change,
       // but listAdaptors are funky to work with. It works.
@@ -199,14 +198,13 @@ public class MainActivity extends AppCompatActivity
 
       for (Task task : tasks) {
         String header = taskHeaderFormat.format(task.calendar.getTime());
-        String entry = taskEntryFormat.format(task.calendar.getTime()) + task.name;
+
         // if it doesnt exist, create it
         if (listDataHeaders.indexOf(header) == -1) {
           listDataHeaders.add(header);
           listDataChildren.put(header, new ArrayList<Task>());
         }
 
-        // listDataChildren.get(header).add(entry);
         listDataChildren.get(header).add(task);
         listAdaptor.setNewItems(listDataHeaders, listDataChildren);
       }
