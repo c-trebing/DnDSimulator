@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity
       Collections.sort(tasks, new Comparator<Task>() {
         @Override
         public int compare(Task t1, Task t2) {
-          return t2.calendar.getTime().compareTo(t1.calendar.getTime());
+          return t1.calendar.getTime().compareTo(t2.calendar.getTime());
         }
       });
     }
