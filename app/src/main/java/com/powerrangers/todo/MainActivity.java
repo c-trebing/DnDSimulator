@@ -23,6 +23,8 @@ import android.widget.TextView;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -31,7 +33,7 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    List<Task> tasks;
+    ArrayList<Task> tasks;
 
     MyExpandableListAdapter listAdaptor;
     ExpandableListView listView;
@@ -156,13 +158,17 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void addTask (Task task) {
-      tasks.add( new Task("name", "date") );
+      tasks.add( task );
+    }
 
-      // if it doesnt exist, create it
-      if (listDataHeaders.indexOf(task.date) == -1) {
-        listDataHeaders.add(task.date);
-        listDataChildren.put(task.date, new ArrayList<String>());
-      }
+    private void sortTasks () {
+      Collections.sort(tasks, new Comparator<Task>() {
+        @Override
+        public int compare(Task t1, Task t2) {
+          return t2.calendar.getTime().compareTo(t1.calendar.getTime());
+        }
+      });
+    }
 
       listDataChildren.get(task.date).add(task.name);
       listAdaptor.setNewItems(listDataHeaders, listDataChildren);
