@@ -170,8 +170,17 @@ public class MainActivity extends AppCompatActivity
       });
     }
 
-      listDataChildren.get(task.date).add(task.name);
-      listAdaptor.setNewItems(listDataHeaders, listDataChildren);
+    private void updateDisplayedTasks () {
+      for (Task task : tasks) {
+        // if it doesnt exist, create it
+        if (listDataHeaders.indexOf(task.date) == -1) {
+          listDataHeaders.add(0, task.date);
+          listDataChildren.put(task.date, new ArrayList<String>());
+        }
+
+        listDataChildren.get(task.date).add(task.name);
+        listAdaptor.setNewItems(listDataHeaders, listDataChildren);
+      }
     }
 
     private void prepareMockData () {
