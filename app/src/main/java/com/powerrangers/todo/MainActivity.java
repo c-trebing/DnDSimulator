@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity
     MyExpandableListAdapter listAdaptor;
     ExpandableListView listView;
     List<String> listDataHeaders;
-    HashMap<String, List<String>> listDataChildren;
+    HashMap<String, List<Task>> listDataChildren;
 
     /*********test of firebase********/
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity
 
         tasks = new ArrayList<Task>();
         listDataHeaders = new ArrayList<String>();
-        listDataChildren = new HashMap<String, List<String>>();
+        listDataChildren = new HashMap<String, List<Task>>();
 
         listAdaptor = new MyExpandableListAdapter(this, listDataHeaders, listDataChildren);
         listView = (ExpandableListView) findViewById(R.id.task_list);
@@ -203,10 +203,11 @@ public class MainActivity extends AppCompatActivity
         // if it doesnt exist, create it
         if (listDataHeaders.indexOf(header) == -1) {
           listDataHeaders.add(header);
-          listDataChildren.put(header, new ArrayList<String>());
+          listDataChildren.put(header, new ArrayList<Task>());
         }
 
-        listDataChildren.get(header).add(entry);
+        // listDataChildren.get(header).add(entry);
+        listDataChildren.get(header).add(task);
         listAdaptor.setNewItems(listDataHeaders, listDataChildren);
       }
     }

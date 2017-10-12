@@ -17,10 +17,10 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
 
     private Context _context;
     private List<String> _listHeaders;
-    private HashMap<String, List<String>> _listChildren;
+    private HashMap<String, List<Task>> _listChildren;
 
     public MyExpandableListAdapter(Context context, List<String> listHeaders,
-            HashMap<String, List<String>> listChildren) {
+            HashMap<String, List<Task>> listChildren) {
         this._context = context;
         this._listHeaders = listHeaders;
         this._listChildren = listChildren;
@@ -41,7 +41,8 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, final int childPosition,
             boolean isLastChild, View convertView, ViewGroup parent) {
 
-        final String childText = (String) getChild(groupPosition, childPosition);
+        Task child = (Task) getChild(groupPosition, childPosition);
+        final String childText = child.name;
 
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
@@ -119,7 +120,7 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
         return true;
     }
 
-    public void setNewItems(List<String> listHeader, HashMap<String, List<String>> listChildren) {
+    public void setNewItems(List<String> listHeaders, HashMap<String, List<Task>> listChildren) {
       this._listHeaders = listHeaders;
       this._listChildren = listChildren;
       notifyDataSetChanged();
