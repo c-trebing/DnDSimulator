@@ -23,12 +23,15 @@ import android.widget.TextView;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+
+import static android.R.attr.format;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -95,6 +98,8 @@ public class MainActivity extends AppCompatActivity
       if (resultCode == 200 && requestCode == 100) {
         Task task = (Task)intent.getSerializableExtra("CREATED_TASK");
         addTask(task);
+        sortTasks();
+        updateDisplayedTasks();
       }
     }
 
@@ -171,25 +176,38 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void updateDisplayedTasks () {
+      SimpleDateFormat sdf = new SimpleDateFormat("EEEE, MMM d");
+
+      // Kinda naive to tear it down and rebuild it at every change,
+      // but listAdaptors are funky to work with. It works.
+      listDataHeaders.clear();
+      listDataChildren.clear();
+
       for (Task task : tasks) {
+        String formattedDate = sdf.format(task.calendar.getTime());
         // if it doesnt exist, create it
-        if (listDataHeaders.indexOf(task.date) == -1) {
-          listDataHeaders.add(0, task.date);
-          listDataChildren.put(task.date, new ArrayList<String>());
+        if (listDataHeaders.indexOf(formattedDate) == -1) {
+          listDataHeaders.add(formattedDate);
+          listDataChildren.put(formattedDate, new ArrayList<String>());
         }
 
-        listDataChildren.get(task.date).add(task.name);
+        listDataChildren.get(formattedDate).add(task.name);
         listAdaptor.setNewItems(listDataHeaders, listDataChildren);
       }
     }
 
     private void prepareMockData () {
       SimpleDateFormat sdf = new SimpleDateFormat("EEEE, MMM d");
-      Date today = new Date();
-      Date tomorrow = new Date(today.getTime() + (1000 * 60 * 60 * 24));
-      addTask( new Task("panic about tomorrow", sdf.format(today)) );
-      for (int i=1; i<100; i++) {
-        addTask( new Task("problem " + i, sdf.format(tomorrow)) );
+      Calendar today = Calendar.getInstance();
+      Calendar tomorrow = Calendar.getInstance();
+      tomorrow.add(Calendar.DATE, 1);
+
+      for (int i=1; i<20; i++) {
+        addTask( new Task("problem " + i, tomorrow) );
       }
+      addTask( new Task("panic about tomorrow", today) );
+
+      sortTasks();
+      updateDisplayedTasks();
     }
 }
