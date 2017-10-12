@@ -1,5 +1,6 @@
 package com.powerrangers.todo;
 
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 
@@ -16,19 +17,19 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
     public final static String EXTRA_MESSAGE = "";
 
     private Context _context;
-    private List<String> _listDataHeader;
-    private HashMap<String, List<String>> _listDataChild;
+    private List<String> _listHeaders;
+    private HashMap<String, List<Task>> _listChildren;
 
-    public MyExpandableListAdapter(Context context, List<String> listDataHeader,
-            HashMap<String, List<String>> listChildData) {
+    public MyExpandableListAdapter(Context context, List<String> listHeaders,
+            HashMap<String, List<Task>> listChildren) {
         this._context = context;
-        this._listDataHeader = listDataHeader;
-        this._listDataChild = listChildData;
+        this._listHeaders = listHeaders;
+        this._listChildren = listChildren;
     }
 
     @Override
     public Object getChild(int groupPosition, int childPosititon) {
-        return this._listDataChild.get(this._listDataHeader.get(groupPosition))
+        return this._listChildren.get(this._listHeaders.get(groupPosition))
                 .get(childPosititon);
     }
 
@@ -41,7 +42,10 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, final int childPosition,
             boolean isLastChild, View convertView, ViewGroup parent) {
 
-        final String childText = (String) getChild(groupPosition, childPosition);
+        SimpleDateFormat taskEntryFormat = new SimpleDateFormat("hh:mm a  -  ");
+        Task child = (Task) getChild(groupPosition, childPosition);
+        String time = taskEntryFormat.format(child.calendar.getTime());
+        String childText = time + child.name;
 
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
@@ -72,18 +76,18 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return this._listDataChild.get(this._listDataHeader.get(groupPosition))
+        return this._listChildren.get(this._listHeaders.get(groupPosition))
                 .size();
     }
 
     @Override
     public Object getGroup(int groupPosition) {
-        return this._listDataHeader.get(groupPosition);
+        return this._listHeaders.get(groupPosition);
     }
 
     @Override
     public int getGroupCount() {
-        return this._listDataHeader.size();
+        return this._listHeaders.size();
     }
 
     @Override
@@ -119,9 +123,9 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
         return true;
     }
 
-    public void setNewItems(List<String> listDataHeader, HashMap<String, List<String>> listChildData) {
-      this._listDataHeader = listDataHeader;
-      this._listDataChild = listChildData;
+    public void setNewItems(List<String> listHeaders, HashMap<String, List<Task>> listChildren) {
+      this._listHeaders = listHeaders;
+      this._listChildren = listChildren;
       notifyDataSetChanged();
     }
 }
