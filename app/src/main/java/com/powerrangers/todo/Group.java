@@ -12,3 +12,4 @@ public class Group {
     }
     // getters and setters below
 }
+
