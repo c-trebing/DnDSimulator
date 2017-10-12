@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class CreateTaskActivity extends AppCompatActivity
@@ -19,7 +20,7 @@ public class CreateTaskActivity extends AppCompatActivity
     private EditText nameInput;
     private EditText dateInput;
     private EditText timeInput;
-    private Task newTask;
+    private Calendar aggregateCalendar;
 
     private boolean validateInput (String name, String date, String time) {
         if (TextUtils.isEmpty(name)) {
@@ -43,7 +44,7 @@ public class CreateTaskActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_task);
 
-        newTask = new Task("temp name", "temp date");
+        aggregateCalendar = Calendar.getInstance();
 
         nameInput = (EditText) findViewById(R.id.create_task_name_input);
         dateInput = (EditText) findViewById(R.id.create_task_date_input);
@@ -73,8 +74,19 @@ public class CreateTaskActivity extends AppCompatActivity
     }
 
     @Override
-    public void returnDate (String date) {
-        dateInput.setText(date);
+    public void returnDate (Calendar calendar) {
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE, MMM d");
+        String formattedDate = sdf.format(calendar.getTime());
+
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        aggregateCalendar.set(Calendar.YEAR, year);
+        aggregateCalendar.set(Calendar.MONTH, month);
+        aggregateCalendar.set(Calendar.DAY_OF_MONTH, day);
+
+        dateInput.setText(formattedDate);
     }
 
     @Override
@@ -82,8 +94,8 @@ public class CreateTaskActivity extends AppCompatActivity
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
 
-        newTask.calendar.set(Calendar.HOUR_OF_DAY, hour);
-        newTask.calendar.set(Calendar.MINUTE, minute);
+        aggregateCalendar.set(Calendar.HOUR_OF_DAY, hour);
+        aggregateCalendar.set(Calendar.MINUTE, minute);
 
         timeInput.setText(String.format("%02d:%02d", hour, minute));
     }
@@ -94,7 +106,7 @@ public class CreateTaskActivity extends AppCompatActivity
         String time = timeInput.getText().toString();
 
         if (validateInput(name, date, time)) {
-            Task task = new Task(name, date);
+            Task task = new Task(name, aggregateCalendar);
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra("CREATED_TASK", task);
             setResult(200, intent);
