@@ -16,7 +16,7 @@ public class DatePickerFragment extends DialogFragment
     DatePickedListener listener;
 
     public interface DatePickedListener {
-        public void returnDate (String date);
+        public void returnDate (Calendar c);
     }
 
     @Override
@@ -36,11 +36,8 @@ public class DatePickerFragment extends DialogFragment
       Calendar c = Calendar.getInstance();
       c.set(year, month, day);
 
-      SimpleDateFormat sdf = new SimpleDateFormat("EEEE, MMM d");
-      String formattedDate = sdf.format(c.getTime());
-      if (listener != null)
-      {
-        listener.returnDate(formattedDate);
+      if (listener != null) {
+        listener.returnDate(c);
       }
     }
 }
