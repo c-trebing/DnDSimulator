@@ -53,14 +53,15 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
                 .findViewById(R.id.lblListItem);
 
         txtListChild.setText(childText);
+        txtListChild.setPadding(20,10,20,10);
 
         txtListChild.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
               Context context = v.getContext();
               Intent intent = new Intent(context, EditTaskActivity.class);
-              TextView text = (TextView)v;
-              String message = text.getText().toString();
+              TextView tv = (TextView)v;
+              String message = tv.getText().toString();
               intent.putExtra(EXTRA_MESSAGE, message);
               context.startActivity(intent);
             }

@@ -176,7 +176,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void updateDisplayedTasks () {
-      SimpleDateFormat sdf = new SimpleDateFormat("EEEE, MMM d");
+      SimpleDateFormat taskHeaderFormat = new SimpleDateFormat("EEEE, MMM d");
+      SimpleDateFormat taskEntryFormat = new SimpleDateFormat("hh:mm a  -  ");
 
       // Kinda naive to tear it down and rebuild it at every change,
       // but listAdaptors are funky to work with. It works.
@@ -184,20 +185,20 @@ public class MainActivity extends AppCompatActivity
       listDataChildren.clear();
 
       for (Task task : tasks) {
-        String formattedDate = sdf.format(task.calendar.getTime());
+        String header = taskHeaderFormat.format(task.calendar.getTime());
+        String entry = taskEntryFormat.format(task.calendar.getTime()) + task.name;
         // if it doesnt exist, create it
-        if (listDataHeaders.indexOf(formattedDate) == -1) {
-          listDataHeaders.add(formattedDate);
-          listDataChildren.put(formattedDate, new ArrayList<String>());
+        if (listDataHeaders.indexOf(header) == -1) {
+          listDataHeaders.add(header);
+          listDataChildren.put(header, new ArrayList<String>());
         }
 
-        listDataChildren.get(formattedDate).add(task.name);
+        listDataChildren.get(header).add(entry);
         listAdaptor.setNewItems(listDataHeaders, listDataChildren);
       }
     }
 
     private void prepareMockData () {
-      SimpleDateFormat sdf = new SimpleDateFormat("EEEE, MMM d");
       Calendar today = Calendar.getInstance();
       Calendar tomorrow = Calendar.getInstance();
       tomorrow.add(Calendar.DATE, 1);
