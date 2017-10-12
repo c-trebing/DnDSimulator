@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.Random;
 
 import static android.R.attr.format;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -42,6 +44,11 @@ public class MainActivity extends AppCompatActivity
     ExpandableListView listView;
     List<String> listDataHeaders;
     HashMap<String, List<String>> listDataChildren;
+
+    /*********test of firebase********/
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference myRef = database.getReference("message");
+    /*********test of firebase********/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +107,10 @@ public class MainActivity extends AppCompatActivity
         addTask(task);
         sortTasks();
         updateDisplayedTasks();
+
+          /*********test of firebase********/
+          myRef.setValue(task.name);
+          /*********test of firebase********/
       }
     }
 
