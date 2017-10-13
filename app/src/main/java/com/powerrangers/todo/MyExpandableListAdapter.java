@@ -1,7 +1,7 @@
 package com.powerrangers.todo;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -18,11 +18,11 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
     public final static String EXTRA_MESSAGE = "";
 
     private Context _context;
-    private List<Date> _listHeaders;
-    private HashMap<Date, List<Task>> _listChildren;
+    private List<Calendar> _listHeaders;
+    private HashMap<Calendar, List<Task>> _listChildren;
 
-    public MyExpandableListAdapter(Context context, List<Date> listHeaders,
-            HashMap<Date, List<Task>> listChildren) {
+    public MyExpandableListAdapter(Context context, List<Calendar> listHeaders,
+            HashMap<Calendar, List<Task>> listChildren) {
         this._context = context;
         this._listHeaders = listHeaders;
         this._listChildren = listChildren;
@@ -105,9 +105,9 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
             convertView = infalInflater.inflate(R.layout.list_group, null);
         }
 
-        Date header = (Date) getGroup(groupPosition);
+        Calendar header = (Calendar) getGroup(groupPosition);
         SimpleDateFormat taskHeaderFormat = new SimpleDateFormat("EEEE, MMM d");
-        String headerTitle = taskHeaderFormat.format(header);
+        String headerTitle = taskHeaderFormat.format(header.getTime());
         TextView lblListHeader = (TextView) convertView
                 .findViewById(R.id.list_header);
 
@@ -127,7 +127,7 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
         return true;
     }
 
-    public void setNewItems(List<Date> listHeaders, HashMap<Date, List<Task>> listChildren) {
+    public void setNewItems(List<Calendar> listHeaders, HashMap<Calendar, List<Task>> listChildren) {
       this._listHeaders = listHeaders;
       this._listChildren = listChildren;
       notifyDataSetChanged();
