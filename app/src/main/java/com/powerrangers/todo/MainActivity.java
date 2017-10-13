@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -42,8 +41,8 @@ public class MainActivity extends AppCompatActivity
 
     MyExpandableListAdapter listAdaptor;
     ExpandableListView listView;
-    List<Date> listDataHeaders;
-    HashMap<Date, List<Task>> listDataChildren;
+    List<Calendar> listDataHeaders;
+    HashMap<Calendar, List<Task>> listDataChildren;
 
     /*********Addition of firebase********/
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -78,8 +77,8 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         tasks = new ArrayList<Task>();
-        listDataHeaders = new ArrayList<Date>();
-        listDataChildren = new HashMap<Date, List<Task>>();
+        listDataHeaders = new ArrayList<Calendar>();
+        listDataChildren = new HashMap<Calendar, List<Task>>();
 
         listAdaptor = new MyExpandableListAdapter(this, listDataHeaders, listDataChildren);
         listView = (ExpandableListView) findViewById(R.id.task_list);
@@ -189,8 +188,18 @@ public class MainActivity extends AppCompatActivity
       });
     }
 
+    private Calendar removeTimeFromCalendar (Calendar c) {
+      Calendar newDate = Calendar.getInstance();
+      newDate.setTime(c.getTime());
+      newDate.set(Calendar.HOUR_OF_DAY, 0);
+      newDate.set(Calendar.MINUTE, 0);
+      newDate.set(Calendar.SECOND, 0);
+      newDate.set(Calendar.MILLISECOND, 0);
+      return newDate;
+    }
+
     private void updateDisplayedTasks (Task task) {
-      Date header = task.calendar.getTime();
+      Calendar header = removeTimeFromCalendar(task.calendar);
 
       // if it doesnt exist, create it
       if (listDataHeaders.indexOf(header) == -1) {
@@ -224,7 +233,5 @@ public class MainActivity extends AppCompatActivity
         addTask( new Task("problem " + i, tomorrow) );
       }
       addTask( new Task("panic about tomorrow", today) );
-
-      sortTasks(this.tasks);
     }
 }
