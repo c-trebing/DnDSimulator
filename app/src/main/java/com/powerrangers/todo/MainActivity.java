@@ -188,8 +188,18 @@ public class MainActivity extends AppCompatActivity
       });
     }
 
+    private Calendar removeTimeFromCalendar (Calendar c) {
+      Calendar newDate = Calendar.getInstance();
+      newDate.setTime(c.getTime());
+      newDate.set(Calendar.HOUR_OF_DAY, 0);
+      newDate.set(Calendar.MINUTE, 0);
+      newDate.set(Calendar.SECOND, 0);
+      newDate.set(Calendar.MILLISECOND, 0);
+      return newDate;
+    }
+
     private void updateDisplayedTasks (Task task) {
-      Calendar header = task.calendar;
+      Calendar header = removeTimeFromCalendar(task.calendar);
 
       // if it doesnt exist, create it
       if (listDataHeaders.indexOf(header) == -1) {
