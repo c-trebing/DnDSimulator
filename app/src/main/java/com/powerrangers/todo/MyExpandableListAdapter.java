@@ -1,6 +1,7 @@
 package com.powerrangers.todo;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,11 +18,11 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
     public final static String EXTRA_MESSAGE = "";
 
     private Context _context;
-    private List<String> _listHeaders;
-    private HashMap<String, List<Task>> _listChildren;
+    private List<Date> _listHeaders;
+    private HashMap<Date, List<Task>> _listChildren;
 
-    public MyExpandableListAdapter(Context context, List<String> listHeaders,
-            HashMap<String, List<Task>> listChildren) {
+    public MyExpandableListAdapter(Context context, List<Date> listHeaders,
+            HashMap<Date, List<Task>> listChildren) {
         this._context = context;
         this._listHeaders = listHeaders;
         this._listChildren = listChildren;
@@ -98,15 +99,18 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded,
             View convertView, ViewGroup parent) {
-        String headerTitle = (String) getGroup(groupPosition);
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.list_group, null);
         }
 
+        Date header = (Date) getGroup(groupPosition);
+        SimpleDateFormat taskHeaderFormat = new SimpleDateFormat("EEEE, MMM d");
+        String headerTitle = taskHeaderFormat.format(header);
         TextView lblListHeader = (TextView) convertView
                 .findViewById(R.id.list_header);
+
         lblListHeader.setTypeface(null, Typeface.BOLD);
         lblListHeader.setText(headerTitle);
 
@@ -123,7 +127,7 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
         return true;
     }
 
-    public void setNewItems(List<String> listHeaders, HashMap<String, List<Task>> listChildren) {
+    public void setNewItems(List<Date> listHeaders, HashMap<Date, List<Task>> listChildren) {
       this._listHeaders = listHeaders;
       this._listChildren = listChildren;
       notifyDataSetChanged();
