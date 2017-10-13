@@ -233,7 +233,5 @@ public class MainActivity extends AppCompatActivity
         addTask( new Task("problem " + i, tomorrow) );
       }
       addTask( new Task("panic about tomorrow", today) );
-
-      sortTasks(this.tasks);
     }
 }
