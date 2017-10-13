@@ -107,9 +107,6 @@ public class MainActivity extends AppCompatActivity
       if (resultCode == 200 && requestCode == 100) {
         Task task = (Task)intent.getSerializableExtra("CREATED_TASK");
         addTask(task);
-        sortTasks();
-        updateDisplayedTasks();
-
       }
     }
 
@@ -174,6 +171,7 @@ public class MainActivity extends AppCompatActivity
 
     private void addTask (Task task) {
         tasks.add( task );
+        updateDisplayedTasks(task);
 
         /** Update Firebase with new information upon addTask**/
         SimpleDateFormat taskFormat = new SimpleDateFormat("EEEE, MMM d @ hh:mm a  -  ");
@@ -182,8 +180,8 @@ public class MainActivity extends AppCompatActivity
         myRef.setValue(task.name);
     }
 
-    private void sortTasks () {
-      Collections.sort(tasks, new Comparator<Task>() {
+    private void sortTasks (List<Task> taskList) {
+      Collections.sort(taskList, new Comparator<Task>() {
         @Override
         public int compare(Task t1, Task t2) {
           return t1.calendar.getTime().compareTo(t2.calendar.getTime());
@@ -191,26 +189,30 @@ public class MainActivity extends AppCompatActivity
       });
     }
 
-    private void updateDisplayedTasks () {
+    private void updateDisplayedTasks (Task task) {
       SimpleDateFormat taskHeaderFormat = new SimpleDateFormat("EEEE, MMM d");
+      String header = taskHeaderFormat.format(task.calendar.getTime());
 
-      // Kinda naive to tear it down and rebuild it at every change,
-      // but listAdaptors are funky to work with. It works.
-      listDataHeaders.clear();
-      listDataChildren.clear();
-
-      for (Task task : tasks) {
-        String header = taskHeaderFormat.format(task.calendar.getTime());
-
-        // if it doesnt exist, create it
-        if (listDataHeaders.indexOf(header) == -1) {
-          listDataHeaders.add(header);
-          listDataChildren.put(header, new ArrayList<Task>());
-        }
-
-        listDataChildren.get(header).add(task);
-        listAdaptor.setNewItems(listDataHeaders, listDataChildren);
+      // if it doesnt exist, create it
+      if (listDataHeaders.indexOf(header) == -1) {
+        listDataHeaders.add(header);
+        listDataChildren.put(header, new ArrayList<Task>());
       }
+
+      // update task if it already exists or create it if it doesnt
+      List<Task> groupList = listDataChildren.get(header);
+      boolean exists = false;
+      for (Task t : groupList) {
+        if (t.id == task.id) {
+          exists = true;
+          t = task;
+        }
+      }
+
+      if (!exists) { groupList.add(task); }
+
+      sortTasks(groupList);
+      listAdaptor.setNewItems(listDataHeaders, listDataChildren);
     }
 
     private void prepareMockData () {
@@ -223,7 +225,6 @@ public class MainActivity extends AppCompatActivity
       }
       addTask( new Task("panic about tomorrow", today) );
 
-      sortTasks();
-      updateDisplayedTasks();
+      sortTasks(this.tasks);
     }
 }
