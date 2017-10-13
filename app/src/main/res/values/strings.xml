@@ -28,11 +28,12 @@
 
     <!-- Strings related to Settings -->
 
-    <!-- Strings related to Create Task -->
-    <string name="create_task_name_hint">Task Name</string>
-    <string name="create_task_date_hint">Task Date</string>
-    <string name="create_task_time_hint">Task Time</string>
+    <!-- Strings related to Create Task and Edit Task -->
+    <string name="task_name_hint">Task Name</string>
+    <string name="task_date_hint">Task Date</string>
+    <string name="task_time_hint">Task Time</string>
     <string name="create_task_submit">Create Task</string>
+    <string name="edit_task_submit">Edit Task</string>
 
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
