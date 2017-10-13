@@ -85,13 +85,16 @@ public class CreateTaskActivity extends AppCompatActivity
 
     @Override
     public void returnTime (Calendar calendar) {
+        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a");
+        String formattedTime = timeFormat.format(calendar.getTime());
+
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
 
         aggregateCalendar.set(Calendar.HOUR_OF_DAY, hour);
         aggregateCalendar.set(Calendar.MINUTE, minute);
 
-        timeInput.setText(String.format("%02d:%02d", hour, minute));
+        timeInput.setText(formattedTime);
     }
 
     public void submitCreateTask (View view) {
