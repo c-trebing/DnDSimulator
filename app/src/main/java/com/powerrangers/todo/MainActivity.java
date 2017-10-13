@@ -196,6 +196,7 @@ public class MainActivity extends AppCompatActivity
       if (listDataHeaders.indexOf(header) == -1) {
         listDataHeaders.add(header);
         listDataChildren.put(header, new ArrayList<Task>());
+        Collections.sort(listDataHeaders);
       }
 
       // update task if it already exists or create it if it doesnt
