@@ -68,12 +68,6 @@ public class CreateTaskActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onCreateOptionsMenu (Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
     public void returnDate (Calendar calendar) {
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE, MMM d");
         String formattedDate = sdf.format(calendar.getTime());
