@@ -42,8 +42,8 @@ public class MainActivity extends AppCompatActivity
 
     MyExpandableListAdapter listAdaptor;
     ExpandableListView listView;
-    List<String> listDataHeaders;
-    HashMap<String, List<Task>> listDataChildren;
+    List<Date> listDataHeaders;
+    HashMap<Date, List<Task>> listDataChildren;
 
     /*********Addition of firebase********/
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -78,8 +78,8 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         tasks = new ArrayList<Task>();
-        listDataHeaders = new ArrayList<String>();
-        listDataChildren = new HashMap<String, List<Task>>();
+        listDataHeaders = new ArrayList<Date>();
+        listDataChildren = new HashMap<Date, List<Task>>();
 
         listAdaptor = new MyExpandableListAdapter(this, listDataHeaders, listDataChildren);
         listView = (ExpandableListView) findViewById(R.id.task_list);
@@ -190,8 +190,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void updateDisplayedTasks (Task task) {
-      SimpleDateFormat taskHeaderFormat = new SimpleDateFormat("EEEE, MMM d");
-      String header = taskHeaderFormat.format(task.calendar.getTime());
+      Date header = task.calendar.getTime();
 
       // if it doesnt exist, create it
       if (listDataHeaders.indexOf(header) == -1) {
