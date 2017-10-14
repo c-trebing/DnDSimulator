@@ -107,6 +107,12 @@ public class MainActivity extends AppCompatActivity
         Task task = (Task)intent.getSerializableExtra("CREATED_TASK");
         addTask(task);
       }
+      if (resultCode == 201 && requestCode == 101) {
+        Task oldTask = (Task) intent.getSerializableExtra("OLD_TASK");
+        Task newTask = (Task) intent.getSerializableExtra("NEW_TASK");
+        deleteTask(oldTask);
+        addTask(newTask);
+      }
     }
 
     @Override
@@ -168,6 +174,13 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    private int searchListByTaskId (List<Task> list, Task task) {
+      for (int i=0; i<list.size(); i++) {
+        if (list.get(i).id.equals(task.id)) { return i; }
+      }
+      return -1;
+    }
+
     private void addTask (Task task) {
         tasks.add( task );
         updateDisplayedTasks(task);
@@ -177,6 +190,27 @@ public class MainActivity extends AppCompatActivity
         String header = taskFormat.format(task.calendar.getTime());
         DatabaseReference myRef = database.getReference(header);
         myRef.setValue(task.name);
+    }
+
+    private void deleteTask (Task task) {
+      // remove task from task list
+      tasks.remove( searchListByTaskId(tasks, task) );
+
+      Calendar header = removeTimeFromCalendar(task.calendar);
+      List<Task> headerGroup = listDataChildren.get(header);
+
+      // remove display header if this is the sole task
+      if (headerGroup.size() == 1) {
+        listDataHeaders.remove(header);
+        listDataChildren.remove(header);
+      }
+
+      // remove task from display header group if group has other tasks
+      else {
+        headerGroup.remove( searchListByTaskId(headerGroup, task) );
+      }
+
+      listAdaptor.setNewItems(listDataHeaders, listDataChildren);
     }
 
     private void sortTasks (List<Task> taskList) {

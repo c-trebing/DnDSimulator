@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -15,8 +16,6 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 public class MyExpandableListAdapter extends BaseExpandableListAdapter {
-    public final static String EXTRA_MESSAGE = "";
-
     private Context _context;
     private List<Calendar> _listHeaders;
     private HashMap<Calendar, List<Task>> _listChildren;
@@ -44,7 +43,7 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
             boolean isLastChild, View convertView, ViewGroup parent) {
 
         SimpleDateFormat taskEntryFormat = new SimpleDateFormat("hh:mm a  -  ");
-        Task child = (Task) getChild(groupPosition, childPosition);
+        final Task child = (Task) getChild(groupPosition, childPosition);
         String time = taskEntryFormat.format(child.calendar.getTime());
         String childText = time + child.name;
 
@@ -63,12 +62,10 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
         txtListChild.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              Context context = v.getContext();
-              Intent intent = new Intent(context, EditTaskActivity.class);
-              TextView tv = (TextView)v;
-              String message = tv.getText().toString();
-              intent.putExtra(EXTRA_MESSAGE, message);
-              context.startActivity(intent);
+              Activity activity = (Activity) v.getContext();
+              Intent intent = new Intent(activity, EditTaskActivity.class);
+              intent.putExtra("EDITED_TASK", child);
+              activity.startActivityForResult(intent, 101);
             }
         });
 
