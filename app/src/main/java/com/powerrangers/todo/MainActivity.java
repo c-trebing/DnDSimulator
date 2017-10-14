@@ -107,6 +107,10 @@ public class MainActivity extends AppCompatActivity
         Task task = (Task)intent.getSerializableExtra("CREATED_TASK");
         addTask(task);
       }
+      if (resultCode == 201 && requestCode == 101) {
+        // Task task = (Task)intent.getSerializableExtra("EDITED_TASK");
+        // addTask(task);
+      }
     }
 
     @Override
