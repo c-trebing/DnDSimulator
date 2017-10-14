@@ -35,237 +35,238 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+  implements NavigationView.OnNavigationItemSelectedListener {
 
-    ArrayList<Task> tasks;
+  ArrayList<Task> tasks;
 
-    MyExpandableListAdapter listAdaptor;
-    ExpandableListView listView;
-    List<Calendar> listDataHeaders;
-    HashMap<Calendar, List<Task>> listDataChildren;
+  MyExpandableListAdapter listAdaptor;
+  ExpandableListView listView;
+  List<Calendar> listDataHeaders;
+  HashMap<Calendar, List<Task>> listDataChildren;
 
-    /*********Addition of firebase********/
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    /*********Addition of firebase********/
+  /*********Addition of firebase********/
+  FirebaseDatabase database = FirebaseDatabase.getInstance();
+  /*********Addition of firebase********/
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
+    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.create_fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Snackbar.make(view, "Replace this text with a tray of buttons...", Snackbar.LENGTH_LONG)
-                //         .setAction("Action", null).show();
-                Context context = view.getContext();
-                Intent intent = new Intent(context, CreateTaskActivity.class);
-                startActivityForResult(intent, 100);
-            }
-        });
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        tasks = new ArrayList<Task>();
-        listDataHeaders = new ArrayList<Calendar>();
-        listDataChildren = new HashMap<Calendar, List<Task>>();
-
-        listAdaptor = new MyExpandableListAdapter(this, listDataHeaders, listDataChildren);
-        listView = (ExpandableListView) findViewById(R.id.task_list);
-        listView.setAdapter(listAdaptor);
-
-        /**Going to add task from firebase to here**/
-
-        /** Finished adding task to firebase upon startup**/
-        prepareMockData();
-    }
-
-    @Override
-    public void onResume () {
-        super.onResume();
-
-        // expand groups by default
-        int count = listAdaptor.getGroupCount();
-        for (int i=0; i<count; i++) {
-          listView.expandGroup(i);
-        }
-    }
-
-    @Override
-    public void onActivityResult (int requestCode, int resultCode, Intent intent) {
-      if (resultCode == 200 && requestCode == 100) {
-        Task task = (Task)intent.getSerializableExtra("CREATED_TASK");
-        addTask(task);
-      }
-      if (resultCode == 201 && requestCode == 101) {
-        Task oldTask = (Task) intent.getSerializableExtra("OLD_TASK");
-        Task newTask = (Task) intent.getSerializableExtra("NEW_TASK");
-        deleteTask(oldTask);
-        addTask(newTask);
-      }
-    }
-
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Intent intent = new Intent(this, SettingsActivity.class);
-            startActivity(intent);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
-    private int searchListByTaskId (List<Task> list, Task task) {
-      for (int i=0; i<list.size(); i++) {
-        if (list.get(i).id.equals(task.id)) { return i; }
-      }
-      return -1;
-    }
-
-    private void addTask (Task task) {
-        tasks.add( task );
-        updateDisplayedTasks(task);
-
-        /** Update Firebase with new information upon addTask**/
-        SimpleDateFormat taskFormat = new SimpleDateFormat("EEEE, MMM d @ hh:mm a  -  ");
-        String header = taskFormat.format(task.calendar.getTime());
-        DatabaseReference myRef = database.getReference(header);
-        myRef.setValue(task.name);
-    }
-
-    private void deleteTask (Task task) {
-      // remove task from task list
-      tasks.remove( searchListByTaskId(tasks, task) );
-
-      Calendar header = removeTimeFromCalendar(task.calendar);
-      List<Task> headerGroup = listDataChildren.get(header);
-
-      // remove display header if this is the sole task
-      if (headerGroup.size() == 1) {
-        listDataHeaders.remove(header);
-        listDataChildren.remove(header);
-      }
-
-      // remove task from display header group if group has other tasks
-      else {
-        headerGroup.remove( searchListByTaskId(headerGroup, task) );
-      }
-
-      listAdaptor.setNewItems(listDataHeaders, listDataChildren);
-    }
-
-    private void sortTasks (List<Task> taskList) {
-      Collections.sort(taskList, new Comparator<Task>() {
+    FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.create_fab);
+    fab.setOnClickListener(new View.OnClickListener() {
         @Override
-        public int compare(Task t1, Task t2) {
-          return t1.calendar.getTime().compareTo(t2.calendar.getTime());
+        public void onClick(View view) {
+            // Snackbar.make(view, "Replace this text with a tray of buttons...", Snackbar.LENGTH_LONG)
+            //         .setAction("Action", null).show();
+            Context context = view.getContext();
+            Intent intent = new Intent(context, CreateTaskActivity.class);
+            startActivityForResult(intent, 100);
         }
-      });
+    });
+
+    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+    ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+            this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+    drawer.setDrawerListener(toggle);
+    toggle.syncState();
+
+    NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+    navigationView.setNavigationItemSelectedListener(this);
+
+    tasks = new ArrayList<Task>();
+    listDataHeaders = new ArrayList<Calendar>();
+    listDataChildren = new HashMap<Calendar, List<Task>>();
+
+    listAdaptor = new MyExpandableListAdapter(this, listDataHeaders, listDataChildren);
+    listView = (ExpandableListView) findViewById(R.id.task_list);
+    listView.setAdapter(listAdaptor);
+
+    /**Going to add task from firebase to here**/
+
+    /** Finished adding task to firebase upon startup**/
+    prepareMockData();
+  }
+
+  @Override
+  public void onResume () {
+    super.onResume();
+
+    // expand groups by default
+    int count = listAdaptor.getGroupCount();
+    for (int i=0; i<count; i++) {
+      listView.expandGroup(i);
+    }
+  }
+
+  @Override
+  public void onActivityResult (int requestCode, int resultCode, Intent intent) {
+    if (resultCode == 200 && requestCode == 100) {
+      Task task = (Task)intent.getSerializableExtra("CREATED_TASK");
+      addTask(task);
+    }
+    if (resultCode == 201 && requestCode == 101) {
+      Task oldTask = (Task) intent.getSerializableExtra("OLD_TASK");
+      Task newTask = (Task) intent.getSerializableExtra("NEW_TASK");
+      deleteTask(oldTask);
+      addTask(newTask);
+    }
+  }
+
+  @Override
+  public void onBackPressed() {
+    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+    if (drawer.isDrawerOpen(GravityCompat.START)) {
+      drawer.closeDrawer(GravityCompat.START);
+    }
+    else {
+      super.onBackPressed();
+    }
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    // Inflate the menu; this adds items to the action bar if it is present.
+    getMenuInflater().inflate(R.menu.main, menu);
+    return true;
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    // Handle action bar item clicks here. The action bar will
+    // automatically handle clicks on the Home/Up button, so long
+    // as you specify a parent activity in AndroidManifest.xml.
+    int id = item.getItemId();
+
+    //noinspection SimplifiableIfStatement
+    if (id == R.id.action_settings) {
+      Intent intent = new Intent(this, SettingsActivity.class);
+      startActivity(intent);
+      return true;
     }
 
-    private Calendar removeTimeFromCalendar (Calendar c) {
-      Calendar newDate = Calendar.getInstance();
-      newDate.setTime(c.getTime());
-      newDate.set(Calendar.HOUR_OF_DAY, 0);
-      newDate.set(Calendar.MINUTE, 0);
-      newDate.set(Calendar.SECOND, 0);
-      newDate.set(Calendar.MILLISECOND, 0);
-      return newDate;
+    return super.onOptionsItemSelected(item);
+  }
+
+  @SuppressWarnings("StatementWithEmptyBody")
+  @Override
+  public boolean onNavigationItemSelected(MenuItem item) {
+    // Handle navigation view item clicks here.
+    int id = item.getItemId();
+
+    if (id == R.id.nav_camera) {
+        // Handle the camera action
+    } else if (id == R.id.nav_gallery) {
+
+    } else if (id == R.id.nav_slideshow) {
+
+    } else if (id == R.id.nav_manage) {
+
+    } else if (id == R.id.nav_share) {
+
+    } else if (id == R.id.nav_send) {
+
     }
 
-    private void updateDisplayedTasks (Task task) {
-      Calendar header = removeTimeFromCalendar(task.calendar);
+    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+    drawer.closeDrawer(GravityCompat.START);
+    return true;
+  }
 
-      // if it doesnt exist, create it
-      if (listDataHeaders.indexOf(header) == -1) {
-        listDataHeaders.add(header);
-        listDataChildren.put(header, new ArrayList<Task>());
-        Collections.sort(listDataHeaders);
+  private int searchListByTaskId (List<Task> list, Task task) {
+    for (int i=0; i<list.size(); i++) {
+      if (list.get(i).id.equals(task.id)) { return i; }
+    }
+    return -1;
+  }
+
+  private void addTask (Task task) {
+    tasks.add( task );
+    updateDisplayedTasks(task);
+
+    /** Update Firebase with new information upon addTask**/
+    SimpleDateFormat taskFormat = new SimpleDateFormat("EEEE, MMM d @ hh:mm a  -  ");
+    String header = taskFormat.format(task.calendar.getTime());
+    DatabaseReference myRef = database.getReference(header);
+    myRef.setValue(task.name);
+  }
+
+  private void deleteTask (Task task) {
+    // remove task from task list
+    tasks.remove( searchListByTaskId(tasks, task) );
+
+    Calendar header = removeTimeFromCalendar(task.calendar);
+    List<Task> headerGroup = listDataChildren.get(header);
+
+    // remove display header if this is the sole task
+    if (headerGroup.size() == 1) {
+      listDataHeaders.remove(header);
+      listDataChildren.remove(header);
+    }
+
+    // remove task from display header group if group has other tasks
+    else {
+      headerGroup.remove( searchListByTaskId(headerGroup, task) );
+    }
+
+    listAdaptor.setNewItems(listDataHeaders, listDataChildren);
+  }
+
+  private void sortTasks (List<Task> taskList) {
+    Collections.sort(taskList, new Comparator<Task>() {
+      @Override
+      public int compare(Task t1, Task t2) {
+        return t1.calendar.getTime().compareTo(t2.calendar.getTime());
       }
+    });
+  }
 
-      // update task if it already exists or create it if it doesnt
-      List<Task> groupList = listDataChildren.get(header);
-      boolean exists = false;
-      for (Task t : groupList) {
-        if (t.id == task.id) {
-          exists = true;
-          t = task;
-        }
-      }
+  private Calendar removeTimeFromCalendar (Calendar c) {
+    Calendar newDate = Calendar.getInstance();
+    newDate.setTime(c.getTime());
+    newDate.set(Calendar.HOUR_OF_DAY, 0);
+    newDate.set(Calendar.MINUTE, 0);
+    newDate.set(Calendar.SECOND, 0);
+    newDate.set(Calendar.MILLISECOND, 0);
+    return newDate;
+  }
 
-      if (!exists) { groupList.add(task); }
+  private void updateDisplayedTasks (Task task) {
+    Calendar header = removeTimeFromCalendar(task.calendar);
 
-      sortTasks(groupList);
-      listAdaptor.setNewItems(listDataHeaders, listDataChildren);
+    // if it doesnt exist, create it
+    if (listDataHeaders.indexOf(header) == -1) {
+      listDataHeaders.add(header);
+      listDataChildren.put(header, new ArrayList<Task>());
+      Collections.sort(listDataHeaders);
     }
 
-    private void prepareMockData () {
-      Calendar today = Calendar.getInstance();
-      Calendar tomorrow = Calendar.getInstance();
-      tomorrow.add(Calendar.DATE, 1);
-
-      for (int i=1; i<20; i++) {
-        addTask( new Task("problem " + i, tomorrow) );
+    // update task if it already exists or create it if it doesnt
+    List<Task> groupList = listDataChildren.get(header);
+    boolean exists = false;
+    for (Task t : groupList) {
+      if (t.id == task.id) {
+        exists = true;
+        t = task;
       }
-      addTask( new Task("panic about tomorrow", today) );
     }
+
+    if (!exists) { groupList.add(task); }
+
+    sortTasks(groupList);
+    listAdaptor.setNewItems(listDataHeaders, listDataChildren);
+  }
+
+  private void prepareMockData () {
+    Calendar today = Calendar.getInstance();
+    Calendar tomorrow = Calendar.getInstance();
+    tomorrow.add(Calendar.DATE, 1);
+
+    for (int i=1; i<20; i++) {
+      addTask( new Task("problem " + i, tomorrow) );
+    }
+    addTask( new Task("panic about tomorrow", today) );
+  }
 }
