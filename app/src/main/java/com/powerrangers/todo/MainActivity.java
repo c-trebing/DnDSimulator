@@ -172,6 +172,13 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    private int searchListByTaskId (List<Task> list, Task task) {
+      for (int i=0; i<list.size(); i++) {
+        if (list.get(i).id == task.id) { return i; }
+      }
+      return -1;
+    }
+
     private void addTask (Task task) {
         tasks.add( task );
         updateDisplayedTasks(task);
