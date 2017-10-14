@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity
 
     private int searchListByTaskId (List<Task> list, Task task) {
       for (int i=0; i<list.size(); i++) {
-        if (list.get(i).id == task.id) { return i; }
+        if (list.get(i).id.equals(task.id)) { return i; }
       }
       return -1;
     }
