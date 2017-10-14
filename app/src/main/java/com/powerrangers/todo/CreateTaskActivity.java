@@ -14,100 +14,100 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class CreateTaskActivity extends AppCompatActivity
-    implements DatePickerFragment.DatePickedListener,
-               TimePickerFragment.TimePickedListener {
-    // UI references.
-    private EditText nameInput;
-    private EditText dateInput;
-    private EditText timeInput;
-    private Calendar aggregateCalendar;
+  implements DatePickerFragment.DatePickedListener,
+             TimePickerFragment.TimePickedListener {
+  // UI references.
+  private EditText nameInput;
+  private EditText dateInput;
+  private EditText timeInput;
+  private Calendar aggregateCalendar;
 
-    private boolean validateInput (String name, String date, String time) {
-        if (TextUtils.isEmpty(name)) {
-            nameInput.setError(getString(R.string.error_field_required));
-            nameInput.requestFocus();
-        }
-        else if (TextUtils.isEmpty(date)) {
-            dateInput.setError(getString(R.string.error_field_required));
-            dateInput.requestFocus();
-        }
-        else if (TextUtils.isEmpty(time)) {
-            timeInput.setError(getString(R.string.error_field_required));
-            timeInput.requestFocus();
-        }
-        else { return true; }
-        return false;
+  private boolean validateInput (String name, String date, String time) {
+    if (TextUtils.isEmpty(name)) {
+        nameInput.setError(getString(R.string.error_field_required));
+        nameInput.requestFocus();
     }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_task);
-
-        aggregateCalendar = Calendar.getInstance();
-
-        nameInput = (EditText) findViewById(R.id.create_task_name_input);
-        dateInput = (EditText) findViewById(R.id.create_task_date_input);
-        timeInput = (EditText) findViewById(R.id.create_task_time_input);
-
-        dateInput.setOnClickListener (new View.OnClickListener() {
-          @Override
-          public void onClick (View arg0) {
-            DialogFragment picker = new DatePickerFragment();
-            picker.show(getFragmentManager(), "datePicker");
-          }
-        });
-
-        timeInput.setOnClickListener (new View.OnClickListener() {
-          @Override
-          public void onClick (View arg0) {
-            DialogFragment picker = new TimePickerFragment();
-            picker.show(getFragmentManager(), "timePicker");
-          }
-        });
+    else if (TextUtils.isEmpty(date)) {
+        dateInput.setError(getString(R.string.error_field_required));
+        dateInput.requestFocus();
     }
-
-    @Override
-    public void returnDate (Calendar calendar) {
-        SimpleDateFormat sdf = new SimpleDateFormat("EEEE, MMM d");
-        String formattedDate = sdf.format(calendar.getTime());
-
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-
-        aggregateCalendar.set(Calendar.YEAR, year);
-        aggregateCalendar.set(Calendar.MONTH, month);
-        aggregateCalendar.set(Calendar.DAY_OF_MONTH, day);
-
-        dateInput.setText(formattedDate);
+    else if (TextUtils.isEmpty(time)) {
+        timeInput.setError(getString(R.string.error_field_required));
+        timeInput.requestFocus();
     }
+    else { return true; }
+    return false;
+  }
 
-    @Override
-    public void returnTime (Calendar calendar) {
-        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a");
-        String formattedTime = timeFormat.format(calendar.getTime());
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_create_task);
 
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int minute = calendar.get(Calendar.MINUTE);
+    aggregateCalendar = Calendar.getInstance();
 
-        aggregateCalendar.set(Calendar.HOUR_OF_DAY, hour);
-        aggregateCalendar.set(Calendar.MINUTE, minute);
+    nameInput = (EditText) findViewById(R.id.create_task_name_input);
+    dateInput = (EditText) findViewById(R.id.create_task_date_input);
+    timeInput = (EditText) findViewById(R.id.create_task_time_input);
 
-        timeInput.setText(formattedTime);
+    dateInput.setOnClickListener (new View.OnClickListener() {
+      @Override
+      public void onClick (View arg0) {
+        DialogFragment picker = new DatePickerFragment();
+        picker.show(getFragmentManager(), "datePicker");
+      }
+    });
+
+    timeInput.setOnClickListener (new View.OnClickListener() {
+      @Override
+      public void onClick (View arg0) {
+        DialogFragment picker = new TimePickerFragment();
+        picker.show(getFragmentManager(), "timePicker");
+      }
+    });
+  }
+
+  @Override
+  public void returnDate (Calendar calendar) {
+    SimpleDateFormat sdf = new SimpleDateFormat("EEEE, MMM d");
+    String formattedDate = sdf.format(calendar.getTime());
+
+    int year = calendar.get(Calendar.YEAR);
+    int month = calendar.get(Calendar.MONTH);
+    int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+    aggregateCalendar.set(Calendar.YEAR, year);
+    aggregateCalendar.set(Calendar.MONTH, month);
+    aggregateCalendar.set(Calendar.DAY_OF_MONTH, day);
+
+    dateInput.setText(formattedDate);
+  }
+
+  @Override
+  public void returnTime (Calendar calendar) {
+    SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a");
+    String formattedTime = timeFormat.format(calendar.getTime());
+
+    int hour = calendar.get(Calendar.HOUR_OF_DAY);
+    int minute = calendar.get(Calendar.MINUTE);
+
+    aggregateCalendar.set(Calendar.HOUR_OF_DAY, hour);
+    aggregateCalendar.set(Calendar.MINUTE, minute);
+
+    timeInput.setText(formattedTime);
+  }
+
+  public void submitCreateTask (View view) {
+    String name = nameInput.getText().toString();
+    String date = dateInput.getText().toString();
+    String time = timeInput.getText().toString();
+
+    if (validateInput(name, date, time)) {
+      Task task = new Task(name, aggregateCalendar);
+      Intent intent = new Intent(this, MainActivity.class);
+      intent.putExtra("CREATED_TASK", task);
+      setResult(200, intent);
+      finish();
     }
-
-    public void submitCreateTask (View view) {
-        String name = nameInput.getText().toString();
-        String date = dateInput.getText().toString();
-        String time = timeInput.getText().toString();
-
-        if (validateInput(name, date, time)) {
-            Task task = new Task(name, aggregateCalendar);
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("CREATED_TASK", task);
-            setResult(200, intent);
-            finish();
-        }
-    }
+  }
 }
