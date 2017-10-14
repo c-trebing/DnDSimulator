@@ -190,6 +190,27 @@ public class MainActivity extends AppCompatActivity
         myRef.setValue(task.name);
     }
 
+    private void deleteTask (Task task) {
+      // remove task from task list
+      tasks.remove( searchListByTaskId(tasks, task) );
+
+      Calendar header = removeTimeFromCalendar(task.calendar);
+      List<Task> headerGroup = listDataChildren.get(header);
+
+      // remove display header if this is the sole task
+      if (headerGroup.size() == 1) {
+        listDataHeaders.remove(header);
+        listDataChildren.remove(header);
+      }
+
+      // remove task from display header group if group has other tasks
+      else {
+        headerGroup.remove( searchListByTaskId(headerGroup, task) );
+      }
+
+      listAdaptor.setNewItems(listDataHeaders, listDataChildren);
+    }
+
     private void sortTasks (List<Task> taskList) {
       Collections.sort(taskList, new Comparator<Task>() {
         @Override
