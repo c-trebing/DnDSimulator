@@ -129,4 +129,11 @@ public class EditTaskActivity extends AppCompatActivity
       finish();
     }
   }
+
+  public void submitDeleteTask (View view) {
+    Intent intent = new Intent(this, MainActivity.class);
+    intent.putExtra("OLD_TASK", oldTask);
+    setResult(202, intent);
+    finish();
+  }
 }
