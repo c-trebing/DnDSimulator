@@ -11,7 +11,8 @@ public class Task implements Serializable {
 
   public Task (String iname, Calendar icalendar) {
     name = iname;
-    calendar = icalendar;
+    calendar = Calendar.getInstance();  // ensures it is a deep copy
+    calendar.setTime(icalendar.getTime());
     id = UUID.randomUUID();
   }
 
