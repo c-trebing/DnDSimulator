@@ -49,38 +49,11 @@ public class MainActivity extends AppCompatActivity
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-    setSupportActionBar(toolbar);
 
-    FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.create_fab);
-    fab.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            // Snackbar.make(view, "Replace this text with a tray of buttons...", Snackbar.LENGTH_LONG)
-            //         .setAction("Action", null).show();
-            Context context = view.getContext();
-            Intent intent = new Intent(context, CreateTaskActivity.class);
-            startActivityForResult(intent, 100);
-        }
-    });
 
-    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-    ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-            this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-    drawer.setDrawerListener(toggle);
-    toggle.syncState();
 
-    NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-    navigationView.setNavigationItemSelectedListener(this);
-
-    tasks = new ArrayList<Task>();
-    listDataHeaders = new ArrayList<Calendar>();
-    listDataChildren = new HashMap<Calendar, List<Task>>();
-
-    listAdaptor = new MyExpandableListAdapter(this, listDataHeaders, listDataChildren);
-    listView = (ExpandableListView) findViewById(R.id.task_list);
-    listView.setAdapter(listAdaptor);
-
+    setupXmlElements();
+    setupTaskDisplay();
     prepareMockData();
   }
 
@@ -175,6 +148,43 @@ public class MainActivity extends AppCompatActivity
     DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
     drawer.closeDrawer(GravityCompat.START);
     return true;
+  }
+
+  private void setupTaskDisplay () {
+    tasks = new ArrayList<Task>();
+    listDataHeaders = new ArrayList<Calendar>();
+    listDataChildren = new HashMap<Calendar, List<Task>>();
+
+    listAdaptor = new MyExpandableListAdapter(this, listDataHeaders, listDataChildren);
+    listView = (ExpandableListView) findViewById(R.id.task_list);
+    listView.setAdapter(listAdaptor);
+  }
+
+  private void setupXmlElements () {
+    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    setSupportActionBar(toolbar);
+
+    FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.create_fab);
+    fab.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            // Snackbar.make(view, "Replace this text with a tray of buttons...", Snackbar.LENGTH_LONG)
+            //         .setAction("Action", null).show();
+            Context context = view.getContext();
+            Intent intent = new Intent(context, CreateTaskActivity.class);
+            startActivityForResult(intent, 100);
+        }
+    });
+
+    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+    ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+            this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+    drawer.setDrawerListener(toggle);
+    toggle.syncState();
+
+    NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+    navigationView.setNavigationItemSelectedListener(this);
+
   }
 
   private int searchListByTaskId (List<Task> list, Task task) {
