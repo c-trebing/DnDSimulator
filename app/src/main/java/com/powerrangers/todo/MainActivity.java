@@ -4,6 +4,8 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -155,12 +157,14 @@ public class MainActivity extends AppCompatActivity
   }
 
   private void setupNotificationOverhead () {
-     notificationBuilder = new NotificationCompat.Builder(this)
+    Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
+    notificationBuilder = new NotificationCompat.Builder(this)
       .setSmallIcon(R.drawable.notification_icon)
       .setContentTitle("My notification")
-      .setContentText("Hello World!");
       .setContentText("Hello World!")
-      .setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000, 1000 })
+      .setVibrate(new long[] { 1000, 1000 })
+      .setSound(alarmSound);
   }
 
   private void sendMockNotification () {
