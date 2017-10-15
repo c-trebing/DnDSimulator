@@ -1,11 +1,13 @@
 package com.powerrangers.todo;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -49,6 +51,17 @@ public class MainActivity extends AppCompatActivity
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+
+    NotificationCompat .Builder notificationBuilder = new NotificationCompat.Builder(this)
+      .setSmallIcon(R.drawable.notification_icon)
+      .setContentTitle("My notification")
+      .setContentText("Hello World!");
+
+    int notificationId = 101;
+    NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+    notificationManager.notify(notificationId, notificationBuilder.build());
+
+
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
 
