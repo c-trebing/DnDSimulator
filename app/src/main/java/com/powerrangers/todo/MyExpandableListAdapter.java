@@ -1,8 +1,11 @@
 package com.powerrangers.todo;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -13,115 +16,117 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 public class MyExpandableListAdapter extends BaseExpandableListAdapter {
-    public final static String EXTRA_MESSAGE = "";
+  private Context _context;
+  private List<Calendar> _listHeaders;
+  private HashMap<Calendar, List<Task>> _listChildren;
 
-    private Context _context;
-    private List<String> _listDataHeader;
-    private HashMap<String, List<String>> _listDataChild;
+  public MyExpandableListAdapter(Context context, List<Calendar> listHeaders,
+    HashMap<Calendar, List<Task>> listChildren) {
+    this._context = context;
+    this._listHeaders = listHeaders;
+    this._listChildren = listChildren;
+  }
 
-    public MyExpandableListAdapter(Context context, List<String> listDataHeader,
-            HashMap<String, List<String>> listChildData) {
-        this._context = context;
-        this._listDataHeader = listDataHeader;
-        this._listDataChild = listChildData;
+  @Override
+  public Object getChild(int groupPosition, int childPosititon) {
+    return this._listChildren.get(this._listHeaders.get(groupPosition))
+      .get(childPosititon);
+  }
+
+  @Override
+  public long getChildId(int groupPosition, int childPosition) {
+    return childPosition;
+  }
+
+  @Override
+  public View getChildView(int groupPosition, final int childPosition,
+    boolean isLastChild, View convertView, ViewGroup parent) {
+
+    SimpleDateFormat taskEntryFormat = new SimpleDateFormat("hh:mm a  -  ");
+    final Task child = (Task) getChild(groupPosition, childPosition);
+    String time = taskEntryFormat.format(child.calendar.getTime());
+    String childText = time + child.name;
+
+    if (convertView == null) {
+        LayoutInflater infalInflater = (LayoutInflater) this._context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        convertView = infalInflater.inflate(R.layout.list_item, null);
     }
 
-    @Override
-    public Object getChild(int groupPosition, int childPosititon) {
-        return this._listDataChild.get(this._listDataHeader.get(groupPosition))
-                .get(childPosititon);
+    TextView txtListChild = (TextView) convertView
+            .findViewById(R.id.lblListItem);
+
+    txtListChild.setText(childText);
+    txtListChild.setPadding(20,10,20,10);
+
+    txtListChild.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        Activity activity = (Activity) v.getContext();
+        Intent intent = new Intent(activity, EditTaskActivity.class);
+        intent.putExtra("EDITED_TASK", child);
+        activity.startActivityForResult(intent, 101);
+      }
+    });
+
+    return convertView;
+  }
+
+  @Override
+  public int getChildrenCount(int groupPosition) {
+    return this._listChildren.get(this._listHeaders.get(groupPosition))
+              .size();
+  }
+
+  @Override
+  public Object getGroup(int groupPosition) {
+    return this._listHeaders.get(groupPosition);
+  }
+
+  @Override
+  public int getGroupCount() {
+    return this._listHeaders.size();
+  }
+
+  @Override
+  public long getGroupId(int groupPosition) {
+    return groupPosition;
+  }
+
+  @Override
+  public View getGroupView(int groupPosition, boolean isExpanded,
+    View convertView, ViewGroup parent) {
+    if (convertView == null) {
+      LayoutInflater infalInflater = (LayoutInflater) this._context
+        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+      convertView = infalInflater.inflate(R.layout.list_group, null);
     }
 
-    @Override
-    public long getChildId(int groupPosition, int childPosition) {
-        return childPosition;
-    }
+    Calendar header = (Calendar) getGroup(groupPosition);
+    SimpleDateFormat taskHeaderFormat = new SimpleDateFormat("EEEE, MMM d");
+    String headerTitle = taskHeaderFormat.format(header.getTime());
+    TextView lblListHeader = (TextView) convertView
+            .findViewById(R.id.list_header);
 
-    @Override
-    public View getChildView(int groupPosition, final int childPosition,
-            boolean isLastChild, View convertView, ViewGroup parent) {
+    lblListHeader.setTypeface(null, Typeface.BOLD);
+    lblListHeader.setText(headerTitle);
 
-        final String childText = (String) getChild(groupPosition, childPosition);
+    return convertView;
+  }
 
-        if (convertView == null) {
-            LayoutInflater infalInflater = (LayoutInflater) this._context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.list_item, null);
-        }
+  @Override
+  public boolean hasStableIds() {
+    return false;
+  }
 
-        TextView txtListChild = (TextView) convertView
-                .findViewById(R.id.lblListItem);
+  @Override
+  public boolean isChildSelectable(int groupPosition, int childPosition) {
+    return true;
+  }
 
-        txtListChild.setText(childText);
-        txtListChild.setPadding(20,10,20,10);
-
-        txtListChild.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-              Context context = v.getContext();
-              Intent intent = new Intent(context, EditTaskActivity.class);
-              TextView tv = (TextView)v;
-              String message = tv.getText().toString();
-              intent.putExtra(EXTRA_MESSAGE, message);
-              context.startActivity(intent);
-            }
-        });
-
-        return convertView;
-    }
-
-    @Override
-    public int getChildrenCount(int groupPosition) {
-        return this._listDataChild.get(this._listDataHeader.get(groupPosition))
-                .size();
-    }
-
-    @Override
-    public Object getGroup(int groupPosition) {
-        return this._listDataHeader.get(groupPosition);
-    }
-
-    @Override
-    public int getGroupCount() {
-        return this._listDataHeader.size();
-    }
-
-    @Override
-    public long getGroupId(int groupPosition) {
-        return groupPosition;
-    }
-
-    @Override
-    public View getGroupView(int groupPosition, boolean isExpanded,
-            View convertView, ViewGroup parent) {
-        String headerTitle = (String) getGroup(groupPosition);
-        if (convertView == null) {
-            LayoutInflater infalInflater = (LayoutInflater) this._context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.list_group, null);
-        }
-
-        TextView lblListHeader = (TextView) convertView
-                .findViewById(R.id.list_header);
-        lblListHeader.setTypeface(null, Typeface.BOLD);
-        lblListHeader.setText(headerTitle);
-
-        return convertView;
-    }
-
-    @Override
-    public boolean hasStableIds() {
-        return false;
-    }
-
-    @Override
-    public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return true;
-    }
-
-    public void setNewItems(List<String> listDataHeader, HashMap<String, List<String>> listChildData) {
-      this._listDataHeader = listDataHeader;
-      this._listDataChild = listChildData;
-      notifyDataSetChanged();
-    }
+  public void setNewItems(List<Calendar> listHeaders, HashMap<Calendar, List<Task>> listChildren) {
+    this._listHeaders = listHeaders;
+    this._listChildren = listChildren;
+    notifyDataSetChanged();
+  }
 }
