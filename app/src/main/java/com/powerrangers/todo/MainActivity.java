@@ -159,6 +159,8 @@ public class MainActivity extends AppCompatActivity
       .setSmallIcon(R.drawable.notification_icon)
       .setContentTitle("My notification")
       .setContentText("Hello World!");
+      .setContentText("Hello World!")
+      .setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000, 1000 })
   }
 
   private void sendMockNotification () {
