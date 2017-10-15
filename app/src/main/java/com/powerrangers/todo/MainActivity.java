@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity
   HashMap<Calendar, List<Task>> listDataChildren;
   FirebaseDatabase database = FirebaseDatabase.getInstance();
   NotificationCompat.Builder notificationBuilder;
+  AlarmManager alarmManager;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -160,14 +161,14 @@ public class MainActivity extends AppCompatActivity
   }
 
   private void setupMockAlarm () {
+    alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
     Intent myIntent = new Intent(this , NotifyService.class);
-    AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
     PendingIntent pendingIntent = PendingIntent.getService(this, 0, myIntent, 0);
 
     Calendar calendar = Calendar.getInstance();
     calendar.add(Calendar.SECOND, 5);
 
-    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000*60*60*24 , pendingIntent);
+    alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
   }
 
   private void setupTaskDisplay () {
