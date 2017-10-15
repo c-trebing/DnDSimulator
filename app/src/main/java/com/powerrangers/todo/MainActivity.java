@@ -1,6 +1,8 @@
 package com.powerrangers.todo;
 
+import android.app.AlarmManager;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -55,12 +57,13 @@ public class MainActivity extends AppCompatActivity
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
-    setupNotificationOverhead();
+    setupMockAlarm();
+    // setupNotificationOverhead();
     setupXmlElements();
     setupTaskDisplay();
 
     prepareMockData();
-    sendMockNotification();
+    // sendMockNotification();
   }
 
   @Override
@@ -156,21 +159,15 @@ public class MainActivity extends AppCompatActivity
     return true;
   }
 
-  private void setupNotificationOverhead () {
-    Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+  private void setupMockAlarm () {
+    Intent myIntent = new Intent(this , NotifyService.class);
+    AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+    PendingIntent pendingIntent = PendingIntent.getService(this, 0, myIntent, 0);
 
-    notificationBuilder = new NotificationCompat.Builder(this)
-      .setSmallIcon(R.drawable.notification_icon)
-      .setContentTitle("My notification")
-      .setContentText("Hello World!")
-      .setVibrate(new long[] { 1000, 1000 })
-      .setSound(alarmSound);
-  }
+    Calendar calendar = Calendar.getInstance();
+    calendar.add(Calendar.SECOND, 5);
 
-  private void sendMockNotification () {
-    int notificationId = 101;
-    NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-    notificationManager.notify(notificationId, notificationBuilder.build());
+    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000*60*60*24 , pendingIntent);
   }
 
   private void setupTaskDisplay () {
