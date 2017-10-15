@@ -46,24 +46,19 @@ public class MainActivity extends AppCompatActivity
   List<Calendar> listDataHeaders;
   HashMap<Calendar, List<Task>> listDataChildren;
   FirebaseDatabase database = FirebaseDatabase.getInstance();
+  NotificationCompat.Builder notificationBuilder;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
-    NotificationCompat .Builder notificationBuilder = new NotificationCompat.Builder(this)
-      .setSmallIcon(R.drawable.notification_icon)
-      .setContentTitle("My notification")
-      .setContentText("Hello World!");
-
-    int notificationId = 101;
-    NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-    notificationManager.notify(notificationId, notificationBuilder.build());
-
+    setupNotificationOverhead();
     setupXmlElements();
     setupTaskDisplay();
+
     prepareMockData();
+    sendMockNotification();
   }
 
   @Override
@@ -157,6 +152,19 @@ public class MainActivity extends AppCompatActivity
     DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
     drawer.closeDrawer(GravityCompat.START);
     return true;
+  }
+
+  private void setupNotificationOverhead () {
+     notificationBuilder = new NotificationCompat.Builder(this)
+      .setSmallIcon(R.drawable.notification_icon)
+      .setContentTitle("My notification")
+      .setContentText("Hello World!");
+  }
+
+  private void sendMockNotification () {
+    int notificationId = 101;
+    NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+    notificationManager.notify(notificationId, notificationBuilder.build());
   }
 
   private void setupTaskDisplay () {
