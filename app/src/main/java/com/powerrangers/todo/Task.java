@@ -19,6 +19,6 @@ public class Task implements Serializable {
   @Override
   public boolean equals (Object other) {
     Task t2 = (Task) other;
-    return this.id == t2.id && this.name == t2.name && this.calendar == t2.calendar;
+    return this.id == t2.id && this.name == t2.name && this.calendar.equals(t2.calendar);
   }
 }
