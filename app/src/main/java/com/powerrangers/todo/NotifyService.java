@@ -9,6 +9,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 public class NotifyService extends Service {
   NotificationCompat.Builder notificationBuilder;
@@ -24,7 +25,7 @@ public class NotifyService extends Service {
       .setSound(alarmSound);
   }
 
-  private void sendMockNotification () {
+  private void sendNotification () {
     int notificationId = 101;
     NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
     notificationManager.notify(notificationId, notificationBuilder.build());
@@ -32,12 +33,12 @@ public class NotifyService extends Service {
 
   @Override
   public int onStartCommand (Intent intent, int flags, int startID) {
+    sendNotification();
     return START_NOT_STICKY;
   }
 
   public void onCreate () {
     setupNotificationOverhead();
-    sendMockNotification();
   }
 
   @Override

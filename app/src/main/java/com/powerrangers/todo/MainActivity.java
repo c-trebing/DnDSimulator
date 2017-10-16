@@ -51,20 +51,21 @@ public class MainActivity extends AppCompatActivity
   HashMap<Calendar, List<Task>> listDataChildren;
   FirebaseDatabase database = FirebaseDatabase.getInstance();
   NotificationCompat.Builder notificationBuilder;
+
   AlarmManager alarmManager;
+  Intent alarmIntent;
+  PendingIntent alarmPendingIntent;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
-    setupMockAlarm();
-    // setupNotificationOverhead();
+    setupAlarms();
     setupXmlElements();
     setupTaskDisplay();
 
     prepareMockData();
-    // sendMockNotification();
   }
 
   @Override
@@ -160,15 +161,14 @@ public class MainActivity extends AppCompatActivity
     return true;
   }
 
-  private void setupMockAlarm () {
+  private void createAlarm (Calendar calendar) {
+    alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmPendingIntent);
+  }
+
+  private void setupAlarms () {
     alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
-    Intent myIntent = new Intent(this , NotifyService.class);
-    PendingIntent pendingIntent = PendingIntent.getService(this, 0, myIntent, 0);
-
-    Calendar calendar = Calendar.getInstance();
-    calendar.add(Calendar.SECOND, 5);
-
-    alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+    alarmIntent = new Intent(this , NotifyService.class);
+    alarmPendingIntent = PendingIntent.getService(this, 0, alarmIntent, 0);
   }
 
   private void setupTaskDisplay () {
@@ -218,6 +218,7 @@ public class MainActivity extends AppCompatActivity
   private void addTask (Task task) {
     tasks.add( task );
     updateDisplayedTasks(task);
+    createAlarm( task.calendar );
 
     /** Update Firebase with new information upon addTask**/
     SimpleDateFormat taskFormat = new SimpleDateFormat("EEEE, MMM d @ hh:mm a  -  ");
