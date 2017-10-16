@@ -199,10 +199,12 @@ public class MainActivity extends AppCompatActivity
     updateDisplayedTasks(task);
 
     /** Update Firebase with new information upon addTask**/
+    /*
     SimpleDateFormat taskFormat = new SimpleDateFormat("EEEE, MMM d @ hh:mm a  -  ");
     String header = taskFormat.format(task.calendar.getTime());
     DatabaseReference myRef = database.getReference(header);
     myRef.setValue(task.name);
+    */
   }
 
   private void deleteTask (Task task) {
