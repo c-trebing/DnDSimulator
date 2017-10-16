@@ -30,6 +30,11 @@ public class NotifyService extends Service {
     notificationManager.notify(notificationId, notificationBuilder.build());
   }
 
+  @Override
+  public int onStartCommand (Intent intent, int flags, int startID) {
+    return START_NOT_STICKY;
+  }
+
   public void onCreate () {
     setupNotificationOverhead();
     sendMockNotification();
