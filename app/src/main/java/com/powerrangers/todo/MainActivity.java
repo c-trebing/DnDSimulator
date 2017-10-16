@@ -203,9 +203,16 @@ public class MainActivity extends AppCompatActivity
     /*
     SimpleDateFormat taskFormat = new SimpleDateFormat("EEEE, MMM d @ hh:mm a  -  ");
     String header = taskFormat.format(task.calendar.getTime());
+<<<<<<< refs/remotes/origin/group
     DatabaseReference myRef = database.getReference(header);
     myRef.setValue(task.name);
     */
+=======
+    DatabaseReference myRef = database.getReference();
+    String uniqueID = myRef.push().getKey();
+    myRef.child("Users").child("Bob").child("Group").child("Self").child(uniqueID).child("dueDate").setValue(header);
+    myRef.child("Users").child("Bob").child("Group").child("Self").child(uniqueID).child("taskName").setValue(task.name);
+>>>>>>> changed so it wouldn't spam the fireBase, got it to look good in fB too
   }
 
   private void deleteTask (Task task) {
@@ -279,7 +286,7 @@ public class MainActivity extends AppCompatActivity
     Calendar tomorrow = Calendar.getInstance();
     tomorrow.add(Calendar.DATE, 1);
 
-    for (int i=1; i<20; i++) {
+    for (int i=1; i<1; i++) {
       addTask( new Task("problem " + i, tomorrow) );
     }
     addTask( new Task("panic about tomorrow", today) );

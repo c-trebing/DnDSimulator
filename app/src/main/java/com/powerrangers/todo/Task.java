@@ -6,9 +6,17 @@ import java.util.UUID;
 
 public class Task implements Serializable {
   public String name;
+  public String description;
   public Calendar calendar;
   public UUID id;
 
+  public Task (String iname, Calendar icalendar, String idescription) {
+    description = idescription;
+    name = iname;
+    calendar = Calendar.getInstance();  // ensures it is a deep copy
+    calendar.setTime(icalendar.getTime());
+    id = UUID.randomUUID();
+  }
   public Task (String iname, Calendar icalendar) {
     name = iname;
     calendar = Calendar.getInstance();  // ensures it is a deep copy
