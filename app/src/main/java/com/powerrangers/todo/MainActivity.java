@@ -2,12 +2,8 @@ package com.powerrangers.todo;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -16,29 +12,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ExpandableListView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import java.io.Serializable;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
-
-import static android.R.attr.format;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    ArrayList<Task> tasks;
+    ArrayList<TaskActivity> tasks;
 
     MyExpandableListAdapter listAdaptor;
     ExpandableListView listView;
@@ -77,7 +68,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        tasks = new ArrayList<Task>();
+        tasks = new ArrayList<TaskActivity>();
         listDataHeaders = new ArrayList<String>();
         listDataChildren = new HashMap<String, List<String>>();
 
@@ -102,7 +93,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onActivityResult (int requestCode, int resultCode, Intent intent) {
       if (resultCode == 200 && requestCode == 100) {
-        Task task = (Task)intent.getSerializableExtra("CREATED_TASK");
+          TaskActivity task = (TaskActivity)intent.getSerializableExtra("CREATED_TASK");
         addTask(task);
         sortTasks();
         updateDisplayedTasks();
@@ -169,7 +160,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void addTask (Task task) {
+    private void addTask (TaskActivity task) {
         tasks.add( task );
 
         /** Update Firebase with new information upon addTask**/
@@ -180,9 +171,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void sortTasks () {
-      Collections.sort(tasks, new Comparator<Task>() {
+      Collections.sort(tasks, new Comparator<TaskActivity>() {
         @Override
-        public int compare(Task t1, Task t2) {
+        public int compare(TaskActivity t1, TaskActivity t2) {
           return t1.calendar.getTime().compareTo(t2.calendar.getTime());
         }
       });
@@ -197,7 +188,7 @@ public class MainActivity extends AppCompatActivity
       listDataHeaders.clear();
       listDataChildren.clear();
 
-      for (Task task : tasks) {
+      for (TaskActivity task : tasks) {
         String header = taskHeaderFormat.format(task.calendar.getTime());
         String entry = taskEntryFormat.format(task.calendar.getTime()) + task.name;
         // if it doesnt exist, create it
@@ -217,9 +208,9 @@ public class MainActivity extends AppCompatActivity
       tomorrow.add(Calendar.DATE, 1);
 
       for (int i=1; i<20; i++) {
-        addTask( new Task("problem " + i, tomorrow) );
+        addTask( new TaskActivity("problem " + i, tomorrow) );
       }
-      addTask( new Task("panic about tomorrow", today) );
+      addTask( new TaskActivity("panic about tomorrow", today) );
 
       sortTasks();
       updateDisplayedTasks();

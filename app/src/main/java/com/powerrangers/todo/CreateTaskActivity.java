@@ -2,10 +2,9 @@ package com.powerrangers.todo;
 
 import android.app.DialogFragment;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
@@ -106,7 +105,7 @@ public class CreateTaskActivity extends AppCompatActivity
         String time = timeInput.getText().toString();
 
         if (validateInput(name, date, time)) {
-            Task task = new Task(name, aggregateCalendar);
+            TaskActivity task = new TaskActivity(name, aggregateCalendar);
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra("CREATED_TASK", task);
             setResult(200, intent);
