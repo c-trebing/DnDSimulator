@@ -30,6 +30,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 import java.util.UUID;
 
@@ -86,6 +87,7 @@ public class MainActivity extends AppCompatActivity
       prepareMockData();
   }
   private void showData(DataSnapshot dataSnapshot){
+<<<<<<< refs/remotes/origin/group
       for(DataSnapshot ds : dataSnapshot.getChildren()){
           Task diffTask = new Task();
           firebaseData newData = ds.getValue(firebaseData.class);
@@ -110,6 +112,23 @@ public class MainActivity extends AppCompatActivity
 
       }
 >>>>>>> Issues with updateTask
+=======
+    for(DataSnapshot ds : dataSnapshot.getChildren()){
+      Task diffTask = new Task();
+      firebaseData newData = ds.getValue(firebaseData.class);
+      String newCalend = newData.dueDate;
+      SimpleDateFormat sdf = new SimpleDateFormat("EEEE, MMM d @ hh:mm a  -  ", Locale.ENGLISH);
+      Calendar cal = sdf.getCalendar();
+      diffTask.setTaskDesc(newData.taskDesc);
+      diffTask.setTaskName(newData.taskName);
+      diffTask.setCalendar(cal);
+      String newUUID = newData.id;
+      UUID newID = UUID.fromString(newUUID);
+      diffTask.setId(newID);
+      tasks.add( diffTask );
+      updateDisplayedTasks(diffTask);
+    }
+>>>>>>> Got it potentially reading from fb db
   }
 
   @Override
@@ -271,7 +290,7 @@ public class MainActivity extends AppCompatActivity
     //generates a unique key
     String uniqueID = myRef.push().getKey();
 
-      myRef.child("Users").child("Bob").child("Group").child("Self").child(uniqueID).child("taskName").setValue(task.taskName);
+    myRef.child("Users").child("Bob").child("Group").child("Self").child(uniqueID).child("taskName").setValue(task.taskName);
     myRef.child("Users").child("Bob").child("Group").child("Self").child(uniqueID).child("dueDate").setValue(header);
 <<<<<<< refs/remotes/origin/group
     myRef.child("Users").child("Bob").child("Group").child("Self").child(uniqueID).child("taskName").setValue(task.name);
