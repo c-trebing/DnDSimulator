@@ -30,6 +30,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 import java.util.UUID;
 
@@ -106,29 +107,21 @@ public class MainActivity extends AppCompatActivity
       prepareMockData();
   }
   private void showData(DataSnapshot dataSnapshot){
-      for(DataSnapshot ds : dataSnapshot.getChildren()){
-          Task diffTask = new Task();
-          firebaseData newData = ds.getValue(firebaseData.class);
-          String newCalend = newData.dueDate;
-          SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-          try
-          {
-            Date date = sdf.parse(newCalend);
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(date);
-            diffTask.setCalendar(cal);
-          }catch(Exception e){
-              e.printStackTrace();
-          }
-          diffTask.setTaskDesc(newData.taskDesc);
-          diffTask.setTaskName(newData.taskName);
-          String newUUID = newData.id;
-          UUID newID = UUID.fromString(newUUID);
-          diffTask.setId(newID);
-          tasks.add( diffTask );
-         //updateDisplayedTasks(diffTask);
-
-      }
+    for(DataSnapshot ds : dataSnapshot.getChildren()){
+      Task diffTask = new Task();
+      firebaseData newData = ds.getValue(firebaseData.class);
+      String newCalend = newData.dueDate;
+      SimpleDateFormat sdf = new SimpleDateFormat("EEEE, MMM d @ hh:mm a  -  ", Locale.ENGLISH);
+      Calendar cal = sdf.getCalendar();
+      diffTask.setTaskDesc(newData.taskDesc);
+      diffTask.setTaskName(newData.taskName);
+      diffTask.setCalendar(cal);
+      String newUUID = newData.id;
+      UUID newID = UUID.fromString(newUUID);
+      diffTask.setId(newID);
+      tasks.add( diffTask );
+      updateDisplayedTasks(diffTask);
+    }
   }
 
   @Override
@@ -244,7 +237,7 @@ public class MainActivity extends AppCompatActivity
     //generates a unique key
     String uniqueID = myRef.push().getKey();
 
-      myRef.child("Users").child("Bob").child("Group").child("Self").child(uniqueID).child("taskName").setValue(task.taskName);
+    myRef.child("Users").child("Bob").child("Group").child("Self").child(uniqueID).child("taskName").setValue(task.taskName);
     myRef.child("Users").child("Bob").child("Group").child("Self").child(uniqueID).child("dueDate").setValue(header);
     myRef.child("Users").child("Bob").child("Group").child("Self").child(uniqueID).child("taskDesc").setValue("none");
     myRef.child("Users").child("Bob").child("Group").child("Self").child(uniqueID).child("id").setValue(task.id.toString());
