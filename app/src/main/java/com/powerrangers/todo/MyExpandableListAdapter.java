@@ -45,7 +45,7 @@ public class MyExpandableListAdapter extends BaseExpandableListAdapter {
     SimpleDateFormat taskEntryFormat = new SimpleDateFormat("hh:mm a  -  ");
     final Task child = (Task) getChild(groupPosition, childPosition);
     String time = taskEntryFormat.format(child.calendar.getTime());
-    String childText = time + child.name;
+    String childText = time + child.taskName;
 
     if (convertView == null) {
         LayoutInflater infalInflater = (LayoutInflater) this._context
