@@ -1,11 +1,17 @@
 package com.powerrangers.todo;
 
+import android.app.AlarmManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -44,16 +50,21 @@ public class MainActivity extends AppCompatActivity
   List<Calendar> listDataHeaders;
   HashMap<Calendar, List<Task>> listDataChildren;
   FirebaseDatabase database = FirebaseDatabase.getInstance();
+  NotificationCompat.Builder notificationBuilder;
+
+  AlarmManager alarmManager;
+  Intent alarmIntent;
+  PendingIntent alarmPendingIntent;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
-
-
+    setupAlarms();
     setupXmlElements();
     setupTaskDisplay();
+
     prepareMockData();
   }
 
@@ -150,6 +161,16 @@ public class MainActivity extends AppCompatActivity
     return true;
   }
 
+  private void createAlarm (Calendar calendar) {
+    alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmPendingIntent);
+  }
+
+  private void setupAlarms () {
+    alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+    alarmIntent = new Intent(this , NotifyService.class);
+    alarmPendingIntent = PendingIntent.getService(this, 0, alarmIntent, 0);
+  }
+
   private void setupTaskDisplay () {
     tasks = new ArrayList<Task>();
     listDataHeaders = new ArrayList<Calendar>();
@@ -197,6 +218,7 @@ public class MainActivity extends AppCompatActivity
   private void addTask (Task task) {
     tasks.add( task );
     updateDisplayedTasks(task);
+    createAlarm( task.calendar );
 
     /** Update Firebase with new information upon addTask**/
     /*
