@@ -22,6 +22,8 @@ import android.widget.TextView;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -29,11 +31,19 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
+
+
+import static android.R.attr.data;
 import static android.R.attr.format;
 
 //importing firebase
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 
 public class MainActivity extends AppCompatActivity
   implements NavigationView.OnNavigationItemSelectedListener {
@@ -52,10 +62,54 @@ public class MainActivity extends AppCompatActivity
     setContentView(R.layout.activity_main);
 
 
+<<<<<<< refs/remotes/origin/group
 
     setupXmlElements();
     setupTaskDisplay();
     prepareMockData();
+=======
+    listAdaptor = new MyExpandableListAdapter(this, listDataHeaders, listDataChildren);
+    listView = (ExpandableListView) findViewById(R.id.task_list);
+    listView.setAdapter(listAdaptor);
+    DatabaseReference myRef = database.getReference();
+    myRef.child("Users").child("Bob").child("Group").child("Self").addValueEventListener(new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+          showData(dataSnapshot);
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    });
+      prepareMockData();
+  }
+  private void showData(DataSnapshot dataSnapshot){
+      for(DataSnapshot ds : dataSnapshot.getChildren()){
+          Task diffTask = new Task();
+          firebaseData newData = ds.getValue(firebaseData.class);
+          String newCalend = newData.dueDate;
+          SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+          try
+          {
+            Date date = sdf.parse(newCalend);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            diffTask.setCalendar(cal);
+          }catch(Exception e){
+              e.printStackTrace();
+          }
+          diffTask.setTaskDesc(newData.taskDesc);
+          diffTask.setTaskName(newData.taskName);
+          String newUUID = newData.id;
+          UUID newID = UUID.fromString(newUUID);
+          diffTask.setId(newID);
+          tasks.add( diffTask );
+         //updateDisplayedTasks(diffTask);
+
+      }
+>>>>>>> Issues with updateTask
   }
 
   @Override
@@ -200,7 +254,11 @@ public class MainActivity extends AppCompatActivity
     updateDisplayedTasks(task);
 
     /** Update Firebase with new information upon addTask**/
+<<<<<<< refs/remotes/origin/group
     /*
+=======
+    //so it's easier to read the calender
+>>>>>>> Issues with updateTask
     SimpleDateFormat taskFormat = new SimpleDateFormat("EEEE, MMM d @ hh:mm a  -  ");
     String header = taskFormat.format(task.calendar.getTime());
 <<<<<<< refs/remotes/origin/group
@@ -209,10 +267,20 @@ public class MainActivity extends AppCompatActivity
     */
 =======
     DatabaseReference myRef = database.getReference();
+
+    //generates a unique key
     String uniqueID = myRef.push().getKey();
+
+      myRef.child("Users").child("Bob").child("Group").child("Self").child(uniqueID).child("taskName").setValue(task.taskName);
     myRef.child("Users").child("Bob").child("Group").child("Self").child(uniqueID).child("dueDate").setValue(header);
+<<<<<<< refs/remotes/origin/group
     myRef.child("Users").child("Bob").child("Group").child("Self").child(uniqueID).child("taskName").setValue(task.name);
 >>>>>>> changed so it wouldn't spam the fireBase, got it to look good in fB too
+=======
+    myRef.child("Users").child("Bob").child("Group").child("Self").child(uniqueID).child("taskDesc").setValue("none");
+    myRef.child("Users").child("Bob").child("Group").child("Self").child(uniqueID).child("id").setValue(task.id.toString());
+
+>>>>>>> Issues with updateTask
   }
 
   private void deleteTask (Task task) {
@@ -257,8 +325,9 @@ public class MainActivity extends AppCompatActivity
 
   private void updateDisplayedTasks (Task task) {
     Calendar header = removeTimeFromCalendar(task.calendar);
+    DatabaseReference myRef = database.getReference();
 
-    // if it doesnt exist, create it
+      // if it doesnt exist, create it
     if (listDataHeaders.indexOf(header) == -1) {
       listDataHeaders.add(header);
       listDataChildren.put(header, new ArrayList<Task>());

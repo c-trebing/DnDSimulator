@@ -49,7 +49,7 @@ public class EditTaskActivity extends AppCompatActivity
 
     Intent intent = getIntent();
     oldTask = (Task) intent.getSerializableExtra("EDITED_TASK");
-    newTask = new Task(oldTask.name, oldTask.calendar);
+    newTask = new Task(oldTask.taskName, oldTask.calendar);
 
     nameInput = (EditText) findViewById(R.id.edit_task_name_input);
     dateInput = (EditText) findViewById(R.id.edit_task_date_input);
@@ -63,7 +63,7 @@ public class EditTaskActivity extends AppCompatActivity
     int hour = oldTask.calendar.get(Calendar.HOUR_OF_DAY);
     int minute = oldTask.calendar.get(Calendar.MINUTE);
 
-    nameInput.setText(oldTask.name);
+    nameInput.setText(oldTask.taskName);
     timeInput.setText(formattedTime);
     dateInput.setText(formattedDate);
 
@@ -120,7 +120,7 @@ public class EditTaskActivity extends AppCompatActivity
     String time = timeInput.getText().toString();
 
     if (validateInput(name, date, time)) {
-      newTask.name = name;
+      newTask.taskName = name;
       newTask.id = oldTask.id;
       Intent intent = new Intent(this, MainActivity.class);
       intent.putExtra("OLD_TASK", oldTask);
