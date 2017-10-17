@@ -32,10 +32,24 @@ public class Group {
     }
 
     public boolean editTask(Task t){ // future: add to firebase
-        for(int i=0; i < group_tasks.size(); i++){
-
+        if(group_tasks.contains(t)){
+            group_tasks.remove(t);
+            group_tasks.add(t);
+            return true;
         }
-        return false;
+        else{
+            return false;
+        }
+    }
+
+    public boolean deleteTask(Task t){ // future: remove from firebase
+        if(group_tasks.contains(t)){
+            group_tasks.remove(t);
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
 
@@ -49,6 +63,14 @@ public class Group {
         }
     }
 
-    //  more getters and setters below
+    public boolean removeMember(UUID id){ // future: remove from firebase
+        if(group_members.contains(id)){
+            group_members.remove(id);
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
 }
 
