@@ -116,8 +116,15 @@ public class MainActivity extends AppCompatActivity
     for(DataSnapshot ds : dataSnapshot.getChildren()){
       Task diffTask = new Task();
       firebaseData newData = ds.getValue(firebaseData.class);
+
       String newCalend = newData.dueDate;
       SimpleDateFormat sdf = new SimpleDateFormat("EEEE, MMM d @ hh:mm a  -  ", Locale.ENGLISH);
+      try {
+        sdf.parse(newCalend);
+      }catch (Exception e){
+        Log.d("~~~~~~~", "Catch");
+      }
+      Log.d("~~~~~~~", "aduwaodwkjawdja");
       Calendar cal = sdf.getCalendar();
       diffTask.setTaskDesc(newData.taskDesc);
       diffTask.setTaskName(newData.taskName);
@@ -290,7 +297,7 @@ public class MainActivity extends AppCompatActivity
     //generates a unique key
     String uniqueID = myRef.push().getKey();
 
-    myRef.child("Users").child("Bob").child("Group").child("Self").child(uniqueID).child("taskName").setValue(task.taskName);
+    myRef.child("Groups").child("Users").child("Group").child("Self").child(uniqueID).child("taskName").setValue(task.taskName);
     myRef.child("Users").child("Bob").child("Group").child("Self").child(uniqueID).child("dueDate").setValue(header);
 <<<<<<< refs/remotes/origin/group
     myRef.child("Users").child("Bob").child("Group").child("Self").child(uniqueID).child("taskName").setValue(task.name);
