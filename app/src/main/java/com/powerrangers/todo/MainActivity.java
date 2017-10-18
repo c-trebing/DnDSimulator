@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity
     listView = (ExpandableListView) findViewById(R.id.task_list);
     listView.setAdapter(listAdaptor);
     DatabaseReference myRef = database.getReference();
-  /*  myRef.child("Users").child("Bob").child("Group").child("Self").addValueEventListener(new ValueEventListener() {
+  myRef.child("Groups").child("groupeOne").addValueEventListener(new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
           showData(dataSnapshot);
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity
 
         }
     });
-  */    prepareMockData();
+    prepareMockData();
   }
   private void showData(DataSnapshot dataSnapshot){
 <<<<<<< refs/remotes/origin/group
@@ -124,7 +124,6 @@ public class MainActivity extends AppCompatActivity
       }catch (Exception e){
         Log.d("~~~~~~~", "Catch");
       }
-      Log.d("~~~~~~~", "aduwaodwkjawdja");
       Calendar cal = sdf.getCalendar();
       diffTask.setTaskDesc(newData.taskDesc);
       diffTask.setTaskName(newData.taskName);
@@ -305,6 +304,10 @@ public class MainActivity extends AppCompatActivity
 =======
     myRef.child("Users").child("Bob").child("Group").child("Self").child(uniqueID).child("taskDesc").setValue("none");
     myRef.child("Users").child("Bob").child("Group").child("Self").child(uniqueID).child("id").setValue(task.id.toString());
+    myRef.child("Groups").child("groupeOne").child("Task").child("taskName").setValue(task.taskName);
+    myRef.child("Groups").child("groupeOne").child("Task").child("dueDate").setValue(header);
+    myRef.child("Groups").child("groupeOne").child("Task").child("taskDesc").setValue("none");
+    myRef.child("Groups").child("groupeOne").child("Task").child("id").setValue(task.id.toString());
 
 >>>>>>> Issues with updateTask
   }

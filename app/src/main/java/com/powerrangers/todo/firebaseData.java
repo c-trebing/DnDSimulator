@@ -7,10 +7,11 @@ import java.io.Serializable;
  */
 
 public class firebaseData implements Serializable {
-        public String taskName;
-        public String taskDesc;
         public String dueDate;
         public String id;
+        public String taskDesc;
+        public String taskName;
+
         firebaseData(){
 
         }
