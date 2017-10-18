@@ -244,7 +244,7 @@ public class MainActivity extends AppCompatActivity
     //generates a unique key
     String uniqueID = myRef.push().getKey();
 
-    myRef.child("Groups").child("Users").child("Group").child("Self").child(uniqueID).child("taskName").setValue(task.taskName);
+    myRef.child("Users").child("Bob").child("Group").child("Self").child(uniqueID).child("taskName").setValue(task.taskName);
     myRef.child("Users").child("Bob").child("Group").child("Self").child(uniqueID).child("dueDate").setValue(header);
     myRef.child("Users").child("Bob").child("Group").child("Self").child(uniqueID).child("taskDesc").setValue("none");
     myRef.child("Users").child("Bob").child("Group").child("Self").child(uniqueID).child("id").setValue(task.id.toString());
