@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity
     listView = (ExpandableListView) findViewById(R.id.task_list);
     listView.setAdapter(listAdaptor);
     DatabaseReference myRef = database.getReference();
-    myRef.child("Users").child("Bob").child("Group").child("Self").addValueEventListener(new ValueEventListener() {
+  /*  myRef.child("Users").child("Bob").child("Group").child("Self").addValueEventListener(new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
           showData(dataSnapshot);
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity
 
         }
     });
-      prepareMockData();
+  */    prepareMockData();
   }
   private void showData(DataSnapshot dataSnapshot){
 <<<<<<< refs/remotes/origin/group
