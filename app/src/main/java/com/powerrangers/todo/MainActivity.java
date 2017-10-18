@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity
   List<Calendar> listDataHeaders;
   HashMap<Calendar, List<Task>> listDataChildren;
   FirebaseDatabase database = FirebaseDatabase.getInstance();
-
+  String uniqueID;
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -93,18 +93,18 @@ public class MainActivity extends AppCompatActivity
     listView = (ExpandableListView) findViewById(R.id.task_list);
     listView.setAdapter(listAdaptor);
     DatabaseReference myRef = database.getReference();
-  myRef.child("Groups").child("groupeOne").addValueEventListener(new ValueEventListener() {
-        @Override
-        public void onDataChange(DataSnapshot dataSnapshot) {
-          showData(dataSnapshot);
-        }
+    myRef.child("Groups").child("groupeOne").child("Tasks").addValueEventListener(new ValueEventListener() {
+      @Override
+      public void onDataChange(DataSnapshot dataSnapshot) {
+        showData(dataSnapshot);
+      }
 
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
+      @Override
+      public void onCancelled(DatabaseError databaseError) {
 
-        }
+      }
     });
-    prepareMockData();
+//    prepareMockData();
   }
   private void showData(DataSnapshot dataSnapshot){
     for(DataSnapshot ds : dataSnapshot.getChildren()){
@@ -241,16 +241,12 @@ public class MainActivity extends AppCompatActivity
     DatabaseReference myRef = database.getReference();
 
     //generates a unique key
-    String uniqueID = myRef.push().getKey();
+    uniqueID = myRef.push().getKey();
 
-    myRef.child("Users").child("Bob").child("Group").child("Self").child(uniqueID).child("taskName").setValue(task.taskName);
-    myRef.child("Users").child("Bob").child("Group").child("Self").child(uniqueID).child("dueDate").setValue(header);
-    myRef.child("Users").child("Bob").child("Group").child("Self").child(uniqueID).child("taskDesc").setValue("none");
-    myRef.child("Users").child("Bob").child("Group").child("Self").child(uniqueID).child("id").setValue(task.id.toString());
-    myRef.child("Groups").child("groupeOne").child("Task").child("taskName").setValue(task.taskName);
-    myRef.child("Groups").child("groupeOne").child("Task").child("dueDate").setValue(header);
-    myRef.child("Groups").child("groupeOne").child("Task").child("taskDesc").setValue("none");
-    myRef.child("Groups").child("groupeOne").child("Task").child("id").setValue(task.id.toString());
+    myRef.child("Groups").child("groupeOne").child("Tasks").child(uniqueID).child("taskName").setValue(task.taskName);
+    myRef.child("Groups").child("groupeOne").child("Tasks").child(uniqueID).child("dueDate").setValue(header);
+    myRef.child("Groups").child("groupeOne").child("Tasks").child(uniqueID).child("taskDesc").setValue("none");
+    myRef.child("Groups").child("groupeOne").child("Tasks").child(uniqueID).child("id").setValue(task.id.toString());
 
   }
 
