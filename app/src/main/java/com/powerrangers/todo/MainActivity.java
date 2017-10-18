@@ -297,7 +297,7 @@ public class MainActivity extends AppCompatActivity
     //generates a unique key
     String uniqueID = myRef.push().getKey();
 
-    myRef.child("Groups").child("Users").child("Group").child("Self").child(uniqueID).child("taskName").setValue(task.taskName);
+    myRef.child("Users").child("Bob").child("Group").child("Self").child(uniqueID).child("taskName").setValue(task.taskName);
     myRef.child("Users").child("Bob").child("Group").child("Self").child(uniqueID).child("dueDate").setValue(header);
 <<<<<<< refs/remotes/origin/group
     myRef.child("Users").child("Bob").child("Group").child("Self").child(uniqueID).child("taskName").setValue(task.name);
