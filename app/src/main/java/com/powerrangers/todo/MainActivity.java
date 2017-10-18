@@ -31,6 +31,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity
   List<Calendar> listDataHeaders;
   HashMap<Calendar, List<Task>> listDataChildren;
   FirebaseDatabase database = FirebaseDatabase.getInstance();
-  String uniqueID;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -120,6 +121,7 @@ public class MainActivity extends AppCompatActivity
       String newCalend = newData.dueDate;
       SimpleDateFormat sdf = new SimpleDateFormat("EEEE, MMM d @ hh:mm a  -  ", Locale.ENGLISH);
       try {
+        Log.d("~~~~~~~", "New Calend: " + newCalend + "new Name: " + newData.taskDesc );
         sdf.parse(newCalend);
       }catch (Exception e){
         Log.d("~~~~~~~", "Catch");
@@ -295,6 +297,7 @@ public class MainActivity extends AppCompatActivity
 
     //generates a unique key
 <<<<<<< refs/remotes/origin/group
+<<<<<<< refs/remotes/origin/group
     String uniqueID = myRef.push().getKey();
 
     myRef.child("Users").child("Bob").child("Group").child("Self").child(uniqueID).child("taskName").setValue(task.taskName);
@@ -311,12 +314,23 @@ public class MainActivity extends AppCompatActivity
     myRef.child("Groups").child("groupeOne").child("Task").child("id").setValue(task.id.toString());
 =======
     uniqueID = myRef.push().getKey();
+=======
+    String uniqueID = myRef.push().getKey();
+    //Map<String, Task> toAdd = new HashMap<String, Task>();
+    //toAdd.put(uniqueID, task);
+    //myRef.child("Groups").child("groupeOne").child("Tasks").setValue(toAdd);
+>>>>>>> It pulls from the db, but too fast
 
+    /*
     myRef.child("Groups").child("groupeOne").child("Tasks").child(uniqueID).child("taskName").setValue(task.taskName);
     myRef.child("Groups").child("groupeOne").child("Tasks").child(uniqueID).child("dueDate").setValue(header);
     myRef.child("Groups").child("groupeOne").child("Tasks").child(uniqueID).child("taskDesc").setValue("none");
     myRef.child("Groups").child("groupeOne").child("Tasks").child(uniqueID).child("id").setValue(task.id.toString());
+<<<<<<< refs/remotes/origin/group
 >>>>>>> got it working with the FBDB
+=======
+    */
+>>>>>>> It pulls from the db, but too fast
 
 >>>>>>> Issues with updateTask
   }
