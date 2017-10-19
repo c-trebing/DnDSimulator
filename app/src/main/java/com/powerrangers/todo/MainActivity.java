@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity
 //    prepareMockData();
   }
   private void showData(DataSnapshot dataSnapshot){
+<<<<<<< HEAD
 <<<<<<< refs/remotes/origin/group
       for(DataSnapshot ds : dataSnapshot.getChildren()){
           Task diffTask = new Task();
@@ -114,6 +115,8 @@ public class MainActivity extends AppCompatActivity
       }
 >>>>>>> Issues with updateTask
 =======
+=======
+>>>>>>> andrewBranch
     for(DataSnapshot ds : dataSnapshot.getChildren()){
       Task diffTask = new Task();
       firebaseData newData = ds.getValue(firebaseData.class);
@@ -136,7 +139,10 @@ public class MainActivity extends AppCompatActivity
       tasks.add( diffTask );
       updateDisplayedTasks(diffTask);
     }
+<<<<<<< HEAD
 >>>>>>> Got it potentially reading from fb db
+=======
+>>>>>>> andrewBranch
   }
 
   @Override
@@ -281,6 +287,7 @@ public class MainActivity extends AppCompatActivity
     updateDisplayedTasks(task);
 
     /** Update Firebase with new information upon addTask**/
+<<<<<<< HEAD
 <<<<<<< refs/remotes/origin/group
     /*
 =======
@@ -315,17 +322,29 @@ public class MainActivity extends AppCompatActivity
 =======
     uniqueID = myRef.push().getKey();
 =======
+=======
+    //so it's easier to read the calender
+    SimpleDateFormat taskFormat = new SimpleDateFormat("EEEE, MMM d @ hh:mm a  -  ");
+    String header = taskFormat.format(task.calendar.getTime());
+    DatabaseReference myRef = database.getReference();
+
+    //generates a unique key
+>>>>>>> andrewBranch
     String uniqueID = myRef.push().getKey();
     //Map<String, Task> toAdd = new HashMap<String, Task>();
     //toAdd.put(uniqueID, task);
     //myRef.child("Groups").child("groupeOne").child("Tasks").setValue(toAdd);
+<<<<<<< HEAD
 >>>>>>> It pulls from the db, but too fast
+=======
+>>>>>>> andrewBranch
 
     /*
     myRef.child("Groups").child("groupeOne").child("Tasks").child(uniqueID).child("taskName").setValue(task.taskName);
     myRef.child("Groups").child("groupeOne").child("Tasks").child(uniqueID).child("dueDate").setValue(header);
     myRef.child("Groups").child("groupeOne").child("Tasks").child(uniqueID).child("taskDesc").setValue("none");
     myRef.child("Groups").child("groupeOne").child("Tasks").child(uniqueID).child("id").setValue(task.id.toString());
+<<<<<<< HEAD
 <<<<<<< refs/remotes/origin/group
 >>>>>>> got it working with the FBDB
 =======
@@ -333,6 +352,10 @@ public class MainActivity extends AppCompatActivity
 >>>>>>> It pulls from the db, but too fast
 
 >>>>>>> Issues with updateTask
+=======
+    */
+
+>>>>>>> andrewBranch
   }
 
   private void deleteTask (Task task) {
