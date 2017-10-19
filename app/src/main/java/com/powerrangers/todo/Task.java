@@ -32,12 +32,6 @@ public class Task implements Serializable {
   @Override
   public boolean equals(Object other) {
     Task t2 = (Task) other;
-<<<<<<< HEAD
-<<<<<<< refs/remotes/origin/group
-    return this.id == t2.id && this.name == t2.name && this.calendar.equals(t2.calendar);
-=======
-=======
->>>>>>> andrewBranch
     return this.id == t2.id && this.taskName == t2.taskName && this.calendar == t2.calendar;
   }
 
@@ -52,10 +46,6 @@ public class Task implements Serializable {
 
   public String getTaskDesc() {
     return taskDesc;
-<<<<<<< HEAD
->>>>>>> Issues with updateTask
-=======
->>>>>>> andrewBranch
   }
 
   public void setTaskDesc(String taskDesc) {

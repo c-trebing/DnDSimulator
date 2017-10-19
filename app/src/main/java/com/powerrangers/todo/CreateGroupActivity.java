@@ -45,7 +45,7 @@ public class CreateGroupActivity extends AppCompatActivity {
         if (validateInput(name, desc)) {
             Group group = new Group(name, desc); // desc should be the group owner. Need a way to pull username...
             Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("CREATED_GROUP", group);
+            //intent.putExtra("CREATED_GROUP", group);
             setResult(200, intent);
             finish();
         }

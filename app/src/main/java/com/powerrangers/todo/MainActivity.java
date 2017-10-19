@@ -62,14 +62,8 @@ public class MainActivity extends AppCompatActivity
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
-
-
-<<<<<<< refs/remotes/origin/group
-
     setupXmlElements();
     setupTaskDisplay();
-    prepareMockData();
-=======
     listAdaptor = new MyExpandableListAdapter(this, listDataHeaders, listDataChildren);
     listView = (ExpandableListView) findViewById(R.id.task_list);
     listView.setAdapter(listAdaptor);
@@ -88,35 +82,6 @@ public class MainActivity extends AppCompatActivity
 //    prepareMockData();
   }
   private void showData(DataSnapshot dataSnapshot){
-<<<<<<< HEAD
-<<<<<<< refs/remotes/origin/group
-      for(DataSnapshot ds : dataSnapshot.getChildren()){
-          Task diffTask = new Task();
-          firebaseData newData = ds.getValue(firebaseData.class);
-          String newCalend = newData.dueDate;
-          SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-          try
-          {
-            Date date = sdf.parse(newCalend);
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(date);
-            diffTask.setCalendar(cal);
-          }catch(Exception e){
-              e.printStackTrace();
-          }
-          diffTask.setTaskDesc(newData.taskDesc);
-          diffTask.setTaskName(newData.taskName);
-          String newUUID = newData.id;
-          UUID newID = UUID.fromString(newUUID);
-          diffTask.setId(newID);
-          tasks.add( diffTask );
-         //updateDisplayedTasks(diffTask);
-
-      }
->>>>>>> Issues with updateTask
-=======
-=======
->>>>>>> andrewBranch
     for(DataSnapshot ds : dataSnapshot.getChildren()){
       Task diffTask = new Task();
       firebaseData newData = ds.getValue(firebaseData.class);
@@ -139,10 +104,6 @@ public class MainActivity extends AppCompatActivity
       tasks.add( diffTask );
       updateDisplayedTasks(diffTask);
     }
-<<<<<<< HEAD
->>>>>>> Got it potentially reading from fb db
-=======
->>>>>>> andrewBranch
   }
 
   @Override
@@ -287,75 +248,19 @@ public class MainActivity extends AppCompatActivity
     updateDisplayedTasks(task);
 
     /** Update Firebase with new information upon addTask**/
-<<<<<<< HEAD
-<<<<<<< refs/remotes/origin/group
-    /*
-=======
     //so it's easier to read the calender
->>>>>>> Issues with updateTask
     SimpleDateFormat taskFormat = new SimpleDateFormat("EEEE, MMM d @ hh:mm a  -  ");
     String header = taskFormat.format(task.calendar.getTime());
-<<<<<<< refs/remotes/origin/group
-    DatabaseReference myRef = database.getReference(header);
-    myRef.setValue(task.name);
-    */
-=======
     DatabaseReference myRef = database.getReference();
 
     //generates a unique key
-<<<<<<< refs/remotes/origin/group
-<<<<<<< refs/remotes/origin/group
-    String uniqueID = myRef.push().getKey();
-
-    myRef.child("Users").child("Bob").child("Group").child("Self").child(uniqueID).child("taskName").setValue(task.taskName);
-    myRef.child("Users").child("Bob").child("Group").child("Self").child(uniqueID).child("dueDate").setValue(header);
-<<<<<<< refs/remotes/origin/group
-    myRef.child("Users").child("Bob").child("Group").child("Self").child(uniqueID).child("taskName").setValue(task.name);
->>>>>>> changed so it wouldn't spam the fireBase, got it to look good in fB too
-=======
-    myRef.child("Users").child("Bob").child("Group").child("Self").child(uniqueID).child("taskDesc").setValue("none");
-    myRef.child("Users").child("Bob").child("Group").child("Self").child(uniqueID).child("id").setValue(task.id.toString());
-    myRef.child("Groups").child("groupeOne").child("Task").child("taskName").setValue(task.taskName);
-    myRef.child("Groups").child("groupeOne").child("Task").child("dueDate").setValue(header);
-    myRef.child("Groups").child("groupeOne").child("Task").child("taskDesc").setValue("none");
-    myRef.child("Groups").child("groupeOne").child("Task").child("id").setValue(task.id.toString());
-=======
+    String uniqueID;
     uniqueID = myRef.push().getKey();
-=======
-=======
-    //so it's easier to read the calender
-    SimpleDateFormat taskFormat = new SimpleDateFormat("EEEE, MMM d @ hh:mm a  -  ");
-    String header = taskFormat.format(task.calendar.getTime());
-    DatabaseReference myRef = database.getReference();
-
-    //generates a unique key
->>>>>>> andrewBranch
-    String uniqueID = myRef.push().getKey();
-    //Map<String, Task> toAdd = new HashMap<String, Task>();
-    //toAdd.put(uniqueID, task);
-    //myRef.child("Groups").child("groupeOne").child("Tasks").setValue(toAdd);
-<<<<<<< HEAD
->>>>>>> It pulls from the db, but too fast
-=======
->>>>>>> andrewBranch
-
-    /*
     myRef.child("Groups").child("groupeOne").child("Tasks").child(uniqueID).child("taskName").setValue(task.taskName);
     myRef.child("Groups").child("groupeOne").child("Tasks").child(uniqueID).child("dueDate").setValue(header);
     myRef.child("Groups").child("groupeOne").child("Tasks").child(uniqueID).child("taskDesc").setValue("none");
     myRef.child("Groups").child("groupeOne").child("Tasks").child(uniqueID).child("id").setValue(task.id.toString());
-<<<<<<< HEAD
-<<<<<<< refs/remotes/origin/group
->>>>>>> got it working with the FBDB
-=======
-    */
->>>>>>> It pulls from the db, but too fast
 
->>>>>>> Issues with updateTask
-=======
-    */
-
->>>>>>> andrewBranch
   }
 
   private void deleteTask (Task task) {
