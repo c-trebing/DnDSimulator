@@ -7,4 +7,10 @@
 /build
 /captures
 .externalNativeBuild
+<<<<<<< HEAD
 .idea/codeStyleSettings.xml
+=======
+.idea/dictionaries/jmkzp.xml
+.idea/codeStyleSettings.xml
+.idea/modules.xml
+>>>>>>> origin/Auth
