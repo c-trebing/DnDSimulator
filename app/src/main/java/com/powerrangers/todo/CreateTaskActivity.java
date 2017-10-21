@@ -113,6 +113,7 @@ public class CreateTaskActivity extends AppCompatActivity
       Intent intent = new Intent(this, MainActivity.class);
       intent.putExtra("CREATED_TASK", task);
       setResult(200, intent);
+      myRef.child("Groups").child("groupeOne").child("Tasks").child(task.getId()).setValue(task);
       finish();
     }
   }

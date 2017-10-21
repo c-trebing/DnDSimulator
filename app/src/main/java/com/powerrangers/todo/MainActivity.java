@@ -87,9 +87,9 @@ public class MainActivity extends AppCompatActivity
 
       String newCalend = newData.calendar;
       SimpleDateFormat sdf = new SimpleDateFormat("EEEE, MMM d @ hh:mm a  -  ", Locale.ENGLISH);
+
       try {
         sdf.parse(newCalend);
-
       }catch (Exception e){
         Log.d("~~~~~~~", "Catch");
       }
@@ -247,12 +247,6 @@ public class MainActivity extends AppCompatActivity
 
     /** Update Firebase with new information upon addTask**/
     //so it's easier to read the calender
-    SimpleDateFormat taskFormat = new SimpleDateFormat("EEEE, MMM d @ hh:mm a  -  ", Locale.ENGLISH);
-    String header = taskFormat.format(task.calendar.getTime());
-
-    //generates a unique key
-    myRef.child("Groups").child("groupeOne").child("Tasks").child(task.getId()).setValue(task);
-
   }
 
   private void deleteTask (Task task) {
@@ -289,6 +283,7 @@ public class MainActivity extends AppCompatActivity
   private Calendar removeTimeFromCalendar (Calendar c) {
     Calendar newDate = Calendar.getInstance();
     newDate.setTime(c.getTime());
+
     newDate.set(Calendar.HOUR_OF_DAY, 0);
     newDate.set(Calendar.MINUTE, 0);
     newDate.set(Calendar.SECOND, 0);
@@ -299,7 +294,6 @@ public class MainActivity extends AppCompatActivity
   private void updateDisplayedTasks (Task task) {
     Calendar header = removeTimeFromCalendar(task.calendar);
     // if it doesnt exist, create it
-    Log.d("~~~~~~~", "New Calend: " + header);
 
     if (listDataHeaders.indexOf(header) == -1) {
       listDataHeaders.add(header);
