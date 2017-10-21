@@ -53,6 +53,9 @@ public class MainActivity extends AppCompatActivity
   List<Calendar> listDataHeaders;
   HashMap<Calendar, List<Task>> listDataChildren;
   FirebaseDatabase database = FirebaseDatabase.getInstance();
+  DatabaseReference myRef = database.getReference();
+  String uniqueId;
+
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +66,7 @@ public class MainActivity extends AppCompatActivity
     listAdaptor = new MyExpandableListAdapter(this, listDataHeaders, listDataChildren);
     listView = (ExpandableListView) findViewById(R.id.task_list);
     listView.setAdapter(listAdaptor);
-    DatabaseReference myRef = database.getReference();
+
     myRef.child("Groups").child("groupeOne").child("Tasks").addValueEventListener(new ValueEventListener() {
       @Override
       public void onDataChange(DataSnapshot dataSnapshot) {
@@ -91,12 +94,11 @@ public class MainActivity extends AppCompatActivity
         Log.d("~~~~~~~", "Catch");
       }
       Calendar cal = sdf.getCalendar();
-      UUID newID = UUID.fromString(newData.id);
 
       diffTask.setTaskDesc(newData.taskDesc);
       diffTask.setTaskName(newData.taskName);
       diffTask.setCalendar(cal);
-      diffTask.setId(newID);
+      diffTask.setId(newData.id);
 
       tasks.add( diffTask );
       updateDisplayedTasks(diffTask);
@@ -247,23 +249,17 @@ public class MainActivity extends AppCompatActivity
     //so it's easier to read the calender
     SimpleDateFormat taskFormat = new SimpleDateFormat("EEEE, MMM d @ hh:mm a  -  ", Locale.ENGLISH);
     String header = taskFormat.format(task.calendar.getTime());
-    DatabaseReference myRef = database.getReference();
 
     //generates a unique key
-    String uniqueID;
-    uniqueID = myRef.push().getKey();
-    myRef.child("Groups").child("groupeOne").child("Tasks").child(uniqueID).setValue(task);
-    /*myRef.child("Groups").child("groupeOne").child("Tasks").child(uniqueID).child("taskName").setValue(task.taskName);
-    myRef.child("Groups").child("groupeOne").child("Tasks").child(uniqueID).child("dueDate").setValue(header);
-    myRef.child("Groups").child("groupeOne").child("Tasks").child(uniqueID).child("taskDesc").setValue("none");
-    myRef.child("Groups").child("groupeOne").child("Tasks").child(uniqueID).child("id").setValue(task.id.toString());
-    */
+    myRef.child("Groups").child("groupeOne").child("Tasks").child(task.getId()).setValue(task);
+
   }
 
   private void deleteTask (Task task) {
     // remove task from task list
+    myRef.child("Groups").child("groupeOne").child("Tasks").child(task.getId()).removeValue();
+    Log.d("~~~~~~~", "taskid: " + task.getId());
     tasks.remove( searchListByTaskId(tasks, task) );
-
     Calendar header = removeTimeFromCalendar(task.calendar);
     List<Task> headerGroup = listDataChildren.get(header);
 
@@ -331,10 +327,9 @@ public class MainActivity extends AppCompatActivity
     Calendar today = Calendar.getInstance();
     Calendar tomorrow = Calendar.getInstance();
     tomorrow.add(Calendar.DATE, 1);
-
     for (int i=1; i<1; i++) {
-      addTask( new Task("problem " + i, tomorrow) );
+      String tempId = myRef.push().getKey();
+      addTask( new Task("problem " + i, tomorrow,tempId) );
     }
-    addTask( new Task("panic about tomorrow", today) );
   }
   }

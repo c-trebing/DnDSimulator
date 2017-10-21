@@ -49,7 +49,7 @@ public class EditTaskActivity extends AppCompatActivity
 
     Intent intent = getIntent();
     oldTask = (Task) intent.getSerializableExtra("EDITED_TASK");
-    newTask = new Task(oldTask.taskName, oldTask.calendar);
+    newTask = new Task(oldTask.taskName, oldTask.calendar, oldTask.id);
 
     nameInput = (EditText) findViewById(R.id.edit_task_name_input);
     dateInput = (EditText) findViewById(R.id.edit_task_date_input);

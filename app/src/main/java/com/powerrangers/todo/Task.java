@@ -2,7 +2,6 @@ package com.powerrangers.todo;
 
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.UUID;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
@@ -11,22 +10,22 @@ public class Task implements Serializable {
   public String taskName;
   public String taskDesc;
   public Calendar calendar;
-  public UUID id;
+  public String id;
 
 //Constructors
-  public Task(String iname, Calendar icalendar, String idescription) {
+  public Task(String iname, Calendar icalendar, String idescription, String newId) {
     taskDesc = idescription;
     taskName = iname;
     calendar = Calendar.getInstance();  // ensures it is a deep copy
     calendar.setTime(icalendar.getTime());
-    id = UUID.randomUUID();
+    id = newId;
   }
 
-  public Task(String iname, Calendar icalendar) {
+  public Task(String iname, Calendar icalendar,String newId) {
     taskName = iname;
     calendar = Calendar.getInstance();  // ensures it is a deep copy
     calendar.setTime(icalendar.getTime());
-    id = UUID.randomUUID();
+    id = newId;
     taskDesc = "none";
   }
   public Task() {
@@ -66,9 +65,9 @@ public class Task implements Serializable {
     this.calendar = calendar;
   }
   public String getId() {
-    return id.toString();
+    return id;
   }
-  public void setId(UUID id) {
+  public void setId(String id) {
     this.id = id;
   }
 
