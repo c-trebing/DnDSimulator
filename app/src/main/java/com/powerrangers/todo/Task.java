@@ -3,6 +3,8 @@ package com.powerrangers.todo;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.UUID;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class Task implements Serializable {
 
@@ -25,6 +27,7 @@ public class Task implements Serializable {
     calendar = Calendar.getInstance();  // ensures it is a deep copy
     calendar.setTime(icalendar.getTime());
     id = UUID.randomUUID();
+    taskDesc = "none";
   }
   public Task() {
   }
@@ -52,15 +55,18 @@ public class Task implements Serializable {
     this.taskDesc = taskDesc;
   }
 
-  public Calendar getCalendar() {
-    return calendar;
+  public String getCalendar() {
+    SimpleDateFormat taskFormat = new SimpleDateFormat("EEEE, MMM d @ hh:mm a  -  ", Locale.ENGLISH);
+    String header = taskFormat.format(this.calendar.getTime());
+
+    return header;
   }
 
   public void setCalendar(Calendar calendar) {
     this.calendar = calendar;
   }
-  public UUID getId() {
-    return id;
+  public String getId() {
+    return id.toString();
   }
   public void setId(UUID id) {
     this.id = id;

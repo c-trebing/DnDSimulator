@@ -19,7 +19,6 @@ import android.view.MenuItem;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -34,11 +33,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
-
-
 import static android.R.attr.data;
 import static android.R.attr.format;
-
 //importing firebase
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -86,21 +82,22 @@ public class MainActivity extends AppCompatActivity
       Task diffTask = new Task();
       firebaseData newData = ds.getValue(firebaseData.class);
 
-      String newCalend = newData.dueDate;
+      String newCalend = newData.calendar;
       SimpleDateFormat sdf = new SimpleDateFormat("EEEE, MMM d @ hh:mm a  -  ", Locale.ENGLISH);
       try {
-        Log.d("~~~~~~~", "New Calend: " + newCalend + "new Name: " + newData.taskDesc );
         sdf.parse(newCalend);
+
       }catch (Exception e){
         Log.d("~~~~~~~", "Catch");
       }
       Calendar cal = sdf.getCalendar();
+      UUID newID = UUID.fromString(newData.id);
+
       diffTask.setTaskDesc(newData.taskDesc);
       diffTask.setTaskName(newData.taskName);
       diffTask.setCalendar(cal);
-      String newUUID = newData.id;
-      UUID newID = UUID.fromString(newUUID);
       diffTask.setId(newID);
+
       tasks.add( diffTask );
       updateDisplayedTasks(diffTask);
     }
@@ -245,22 +242,22 @@ public class MainActivity extends AppCompatActivity
 
   private void addTask (Task task) {
     tasks.add( task );
-    updateDisplayedTasks(task);
 
     /** Update Firebase with new information upon addTask**/
     //so it's easier to read the calender
-    SimpleDateFormat taskFormat = new SimpleDateFormat("EEEE, MMM d @ hh:mm a  -  ");
+    SimpleDateFormat taskFormat = new SimpleDateFormat("EEEE, MMM d @ hh:mm a  -  ", Locale.ENGLISH);
     String header = taskFormat.format(task.calendar.getTime());
     DatabaseReference myRef = database.getReference();
 
     //generates a unique key
     String uniqueID;
     uniqueID = myRef.push().getKey();
-    myRef.child("Groups").child("groupeOne").child("Tasks").child(uniqueID).child("taskName").setValue(task.taskName);
+    myRef.child("Groups").child("groupeOne").child("Tasks").child(uniqueID).setValue(task);
+    /*myRef.child("Groups").child("groupeOne").child("Tasks").child(uniqueID).child("taskName").setValue(task.taskName);
     myRef.child("Groups").child("groupeOne").child("Tasks").child(uniqueID).child("dueDate").setValue(header);
     myRef.child("Groups").child("groupeOne").child("Tasks").child(uniqueID).child("taskDesc").setValue("none");
     myRef.child("Groups").child("groupeOne").child("Tasks").child(uniqueID).child("id").setValue(task.id.toString());
-
+    */
   }
 
   private void deleteTask (Task task) {
@@ -305,9 +302,9 @@ public class MainActivity extends AppCompatActivity
 
   private void updateDisplayedTasks (Task task) {
     Calendar header = removeTimeFromCalendar(task.calendar);
-    DatabaseReference myRef = database.getReference();
+    // if it doesnt exist, create it
+    Log.d("~~~~~~~", "New Calend: " + header);
 
-      // if it doesnt exist, create it
     if (listDataHeaders.indexOf(header) == -1) {
       listDataHeaders.add(header);
       listDataChildren.put(header, new ArrayList<Task>());
@@ -340,4 +337,4 @@ public class MainActivity extends AppCompatActivity
     }
     addTask( new Task("panic about tomorrow", today) );
   }
-}
+  }
