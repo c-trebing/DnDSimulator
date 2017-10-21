@@ -10,11 +10,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -35,6 +37,8 @@ public class MainActivity extends AppCompatActivity
     ExpandableListView listView;
     List<String> listDataHeaders;
     HashMap<String, List<String>> listDataChildren;
+    private static final String TAG = "Main_Activity";
+    private FirebaseAuth mAuth;
 
     /*********test of firebase********/
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -75,6 +79,7 @@ public class MainActivity extends AppCompatActivity
         listAdaptor = new MyExpandableListAdapter(this, listDataHeaders, listDataChildren);
         listView = (ExpandableListView) findViewById(R.id.task_list);
         listView.setAdapter(listAdaptor);
+        mAuth = FirebaseAuth.getInstance();
 
         prepareMockData();
     }
@@ -153,6 +158,11 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_send) {
 
+        } else if (id == R.id.nav_logout) {
+            Log.d(TAG, "Logging out");
+            mAuth.signOut();
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivityForResult(intent, 100);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
