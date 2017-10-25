@@ -24,28 +24,27 @@
     layout="@layout/content_main"
     android:layout_width="match_parent" />
 
-  <android.support.design.widget.FloatingActionButton
-    android:id="@+id/create_fab"
+  <com.getbase.floatingactionbutton.FloatingActionsMenu
+    android:id="@+id/create_menu"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_gravity="bottom|end"
-    android:layout_margin="@dimen/fab_margin"
-    app:srcCompat="@drawable/ic_add" />
-
-    <android.support.design.widget.FloatingActionButton
+    android:layout_gravity="bottom|end">
+    <com.getbase.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_add" />
+        app:srcCompat="@drawable/ic_add"
+        app:fab_title="Create Group"/>
 
-    <android.support.design.widget.FloatingActionButton
+    <com.getbase.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_task"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_add" />
+        app:srcCompat="@drawable/ic_add"
+        app:fab_title="Create Task"/>
+  </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
 
 </android.support.design.widget.CoordinatorLayout>

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+//import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
@@ -31,6 +31,9 @@ import java.util.List;
 import java.util.Random;
 
 import static android.R.attr.format;
+
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -164,19 +167,28 @@ public class MainActivity extends AppCompatActivity
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
 
-    FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.create_fab);
-    FloatingActionButton fab2 = (FloatingActionButton) findViewById(R.id.fab_group);
-    FloatingActionButton fab3 = (FloatingActionButton) findViewById(R.id.fab_task);
-    fab3.setOnClickListener(new View.OnClickListener() {
+    FloatingActionsMenu menu = (FloatingActionsMenu) findViewById(R.id.create_menu);
+
+    com.getbase.floatingactionbutton.FloatingActionButton fab = (com.getbase.floatingactionbutton.FloatingActionButton) findViewById(R.id.fab_group);
+    menu.addButton(fab);
+    fab.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        Context context = view.getContext();
+        Intent intent = new Intent(context, CreateGroupActivity.class);
+        startActivityForResult(intent, 100);
+      }
+    });
+    com.getbase.floatingactionbutton.FloatingActionButton fab1 = (com.getbase.floatingactionbutton.FloatingActionButton) findViewById(R.id.fab_task);
+    fab1.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             // Snackbar.make(view, "Replace this text with a tray of buttons...", Snackbar.LENGTH_LONG)
             //         .setAction("Action", null).show();
 
-            // Put create group here in addition to create task -BM
-//            Context context = view.getContext();
-//            Intent intent = new Intent(context, CreateTaskActivity.class);
-//            startActivityForResult(intent, 100);
+            Context context = view.getContext();
+            Intent intent = new Intent(context, CreateTaskActivity.class);
+            startActivityForResult(intent, 100);
         }
     });
 
