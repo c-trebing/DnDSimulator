@@ -165,14 +165,18 @@ public class MainActivity extends AppCompatActivity
     setSupportActionBar(toolbar);
 
     FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.create_fab);
-    fab.setOnClickListener(new View.OnClickListener() {
+    FloatingActionButton fab2 = (FloatingActionButton) findViewById(R.id.fab_group);
+    FloatingActionButton fab3 = (FloatingActionButton) findViewById(R.id.fab_task);
+    fab3.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             // Snackbar.make(view, "Replace this text with a tray of buttons...", Snackbar.LENGTH_LONG)
             //         .setAction("Action", null).show();
-            Context context = view.getContext();
-            Intent intent = new Intent(context, CreateTaskActivity.class);
-            startActivityForResult(intent, 100);
+
+            // Put create group here in addition to create task -BM
+//            Context context = view.getContext();
+//            Intent intent = new Intent(context, CreateTaskActivity.class);
+//            startActivityForResult(intent, 100);
         }
     });
 
