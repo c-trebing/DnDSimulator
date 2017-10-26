@@ -53,7 +53,6 @@ public class MainActivity extends AppCompatActivity
     setContentView(R.layout.activity_main);
 
 
-
     setupXmlElements();
     setupTaskDisplay();
     prepareMockData();
@@ -143,15 +142,7 @@ public class MainActivity extends AppCompatActivity
         Intent intent = new Intent(this, CreateGroupActivity.class);
         this.startActivity(intent);
         return true;
-    } else if (id == R.id.nav_gallery) {
-
-    } else if (id == R.id.nav_slideshow) {
-
-    } else if (id == R.id.nav_manage) {
-
-    } else if (id == R.id.nav_share) {
-
-    } else if (id == R.id.nav_send) {
+    } else if (id == R.id.demo_group_name) {
 
     }
 
@@ -294,5 +285,7 @@ public class MainActivity extends AppCompatActivity
       addTask( new Task("problem " + i, tomorrow) );
     }
     addTask( new Task("panic about tomorrow", today) );
+
+    //addGroup(new Group("Power Rangers", "This is the Power Rangers group."));  // for demo
   }
 }
