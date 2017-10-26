@@ -3,11 +3,12 @@ package com.powerrangers.todo;
 import android.view.View;
 import android.widget.EditText;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.UUID;
 
 
-public class Group {
+public class Group implements Serializable {
     public String group_name;
     public String group_owner;  // change to User type
     public UUID group_id;

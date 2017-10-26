@@ -32,7 +32,7 @@ public class CreateGroupActivity extends AppCompatActivity {
                     Group group = new Group(name, desc); // desc should be the group owner. Need a way to pull username...
                     Context context = v.getContext();
                     Intent intent = new Intent(context, MainActivity.class);
-                    intent.putExtra("CREATED_GROUP", (Serializable) group);
+                    intent.putExtra("CREATED_GROUP", group);
                     setResult(203, intent);
                     finish();
                 }
