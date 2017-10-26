@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity
   Intent alarmIntent;
   PendingIntent alarmPendingIntent;
 
+
   DatabaseReference myRef = database.getReference();
   String uniqueId;
 
@@ -90,7 +91,6 @@ public class MainActivity extends AppCompatActivity
     setupTaskDisplay();
 
     prepareMockData();
-
     myRef.child("Groups").child("groupeOne").child("Tasks").addValueEventListener(new ValueEventListener() {
       @Override
       public void onDataChange(DataSnapshot dataSnapshot) {
@@ -127,7 +127,6 @@ public class MainActivity extends AppCompatActivity
       tasks.add( diffTask );
       updateDisplayedTasks(diffTask);
     }
-
   }
 
   @Override
