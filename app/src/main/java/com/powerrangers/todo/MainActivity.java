@@ -25,21 +25,31 @@ import android.view.MenuItem;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
-
+import java.util.UUID;
+import static android.R.attr.data;
 import static android.R.attr.format;
+//importing firebase
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 
+//What I want seen at the thingy ma bob
 public class MainActivity extends AppCompatActivity
   implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -50,22 +60,72 @@ public class MainActivity extends AppCompatActivity
   List<Calendar> listDataHeaders;
   HashMap<Calendar, List<Task>> listDataChildren;
   FirebaseDatabase database = FirebaseDatabase.getInstance();
+<<<<<<< HEAD
   NotificationCompat.Builder notificationBuilder;
 
   AlarmManager alarmManager;
   Intent alarmIntent;
   PendingIntent alarmPendingIntent;
+=======
+  DatabaseReference myRef = database.getReference();
+  String uniqueId;
+
+>>>>>>> andrewBranch
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+    setupXmlElements();
+    setupTaskDisplay();
+    listAdaptor = new MyExpandableListAdapter(this, listDataHeaders, listDataChildren);
+    listView = (ExpandableListView) findViewById(R.id.task_list);
+    listView.setAdapter(listAdaptor);
 
+<<<<<<< HEAD
     setupAlarms();
     setupXmlElements();
     setupTaskDisplay();
 
     prepareMockData();
+=======
+    myRef.child("Groups").child("groupeOne").child("Tasks").addValueEventListener(new ValueEventListener() {
+      @Override
+      public void onDataChange(DataSnapshot dataSnapshot) {
+        showData(dataSnapshot);
+      }
+
+      @Override
+      public void onCancelled(DatabaseError databaseError) {
+
+      }
+    });
+//    prepareMockData();
+  }
+  private void showData(DataSnapshot dataSnapshot){
+    for(DataSnapshot ds : dataSnapshot.getChildren()){
+      Task diffTask = new Task();
+      firebaseData newData = ds.getValue(firebaseData.class);
+
+      String newCalend = newData.calendar;
+      SimpleDateFormat sdf = new SimpleDateFormat("EEEE, MMM d @ hh:mm a  -  ", Locale.ENGLISH);
+
+      try {
+        sdf.parse(newCalend);
+      }catch (Exception e){
+        Log.d("~~~~~~~", "Catch");
+      }
+      Calendar cal = sdf.getCalendar();
+
+      diffTask.setTaskDesc(newData.taskDesc);
+      diffTask.setTaskName(newData.taskName);
+      diffTask.setCalendar(cal);
+      diffTask.setId(newData.id);
+
+      tasks.add( diffTask );
+      updateDisplayedTasks(diffTask);
+    }
+>>>>>>> andrewBranch
   }
 
   @Override
@@ -217,22 +277,21 @@ public class MainActivity extends AppCompatActivity
 
   private void addTask (Task task) {
     tasks.add( task );
+<<<<<<< HEAD
     updateDisplayedTasks(task);
     createAlarm( task.calendar );
+=======
+>>>>>>> andrewBranch
 
     /** Update Firebase with new information upon addTask**/
-    /*
-    SimpleDateFormat taskFormat = new SimpleDateFormat("EEEE, MMM d @ hh:mm a  -  ");
-    String header = taskFormat.format(task.calendar.getTime());
-    DatabaseReference myRef = database.getReference(header);
-    myRef.setValue(task.name);
-    */
+    //so it's easier to read the calender
   }
 
   private void deleteTask (Task task) {
     // remove task from task list
+    myRef.child("Groups").child("groupeOne").child("Tasks").child(task.getId()).removeValue();
+    Log.d("~~~~~~~", "taskid: " + task.getId());
     tasks.remove( searchListByTaskId(tasks, task) );
-
     Calendar header = removeTimeFromCalendar(task.calendar);
     List<Task> headerGroup = listDataChildren.get(header);
 
@@ -262,6 +321,7 @@ public class MainActivity extends AppCompatActivity
   private Calendar removeTimeFromCalendar (Calendar c) {
     Calendar newDate = Calendar.getInstance();
     newDate.setTime(c.getTime());
+
     newDate.set(Calendar.HOUR_OF_DAY, 0);
     newDate.set(Calendar.MINUTE, 0);
     newDate.set(Calendar.SECOND, 0);
@@ -271,8 +331,8 @@ public class MainActivity extends AppCompatActivity
 
   private void updateDisplayedTasks (Task task) {
     Calendar header = removeTimeFromCalendar(task.calendar);
-
     // if it doesnt exist, create it
+
     if (listDataHeaders.indexOf(header) == -1) {
       listDataHeaders.add(header);
       listDataChildren.put(header, new ArrayList<Task>());
@@ -299,10 +359,9 @@ public class MainActivity extends AppCompatActivity
     Calendar today = Calendar.getInstance();
     Calendar tomorrow = Calendar.getInstance();
     tomorrow.add(Calendar.DATE, 1);
-
-    for (int i=1; i<20; i++) {
-      addTask( new Task("problem " + i, tomorrow) );
+    for (int i=1; i<1; i++) {
+      String tempId = myRef.push().getKey();
+      addTask( new Task("problem " + i, tomorrow,tempId) );
     }
-    addTask( new Task("panic about tomorrow", today) );
   }
-}
+  }

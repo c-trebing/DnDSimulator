@@ -3,10 +3,10 @@
     package="com.powerrangers.todo">
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
-
+    <uses-permission android:name = "android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name = "android.permission.READ_PROFILE" />
+    <uses-permission android:name = "android.permission.READ_CONTACTS" />
+    <uses-permission android:name = "android.permission.INTERNET" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -44,11 +44,15 @@
             android:name=".EditTaskActivity"
             android:label="@string/title_activity_edit_task"
             android:parentActivityName=".MainActivity"></activity>
+<<<<<<< HEAD
 
         <service
             android:name=".NotifyService"
             android:enabled="true"
             android:exported="true"></service>
+=======
+        <activity android:name=".CreateGroupActivity"></activity>
+>>>>>>> andrewBranch
     </application>
 
 </manifest>
