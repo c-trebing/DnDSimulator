@@ -1,34 +1,32 @@
 package com.powerrangers.todo;
 
 import android.app.AlarmManager;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.NotificationCompat;
-import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ExpandableListView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import java.io.Serializable;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -36,21 +34,12 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
-import static android.R.attr.data;
-import static android.R.attr.format;
+
 //importing firebase
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 
 //What I want seen at the thingy ma bob
 public class MainActivity extends AppCompatActivity
+
   implements NavigationView.OnNavigationItemSelectedListener {
 
   ArrayList<Task> tasks;
@@ -67,6 +56,8 @@ public class MainActivity extends AppCompatActivity
   PendingIntent alarmPendingIntent;
   DatabaseReference myRef = database.getReference();
   String uniqueId;
+  private FirebaseAuth mAuth;
+  private static final String TAG = "Main_Activity";
 
 
   @Override
@@ -82,6 +73,7 @@ public class MainActivity extends AppCompatActivity
     setupAlarms();
     setupXmlElements();
     setupTaskDisplay();
+    mAuth = FirebaseAuth.getInstance();
 
     prepareMockData();
     myRef.child("Groups").child("groupeOne").child("Tasks").addValueEventListener(new ValueEventListener() {
@@ -208,7 +200,12 @@ public class MainActivity extends AppCompatActivity
 
     } else if (id == R.id.nav_send) {
 
-    }
+    } else if (id == R.id.nav_logout) {
+			Log.d(TAG, "Logging out");
+			mAuth.signOut();
+			Intent intent = new Intent(this, LoginActivity.class);
+			startActivityForResult(intent, 100);
+		}
 
     DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
     drawer.closeDrawer(GravityCompat.START);

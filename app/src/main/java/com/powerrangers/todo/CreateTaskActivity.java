@@ -2,10 +2,9 @@ package com.powerrangers.todo;
 
 import android.app.DialogFragment;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
@@ -117,6 +116,7 @@ public class CreateTaskActivity extends AppCompatActivity
       setResult(200, intent);
       myRef.child("Groups").child("groupeOne").child("Tasks").child(task.getId()).setValue(task);
       finish();
+
     }
   }
 }
