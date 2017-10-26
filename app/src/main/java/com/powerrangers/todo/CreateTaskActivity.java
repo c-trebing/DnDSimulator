@@ -13,6 +13,9 @@ import android.widget.EditText;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class CreateTaskActivity extends AppCompatActivity
   implements DatePickerFragment.DatePickedListener,
              TimePickerFragment.TimePickedListener {
@@ -21,6 +24,8 @@ public class CreateTaskActivity extends AppCompatActivity
   private EditText dateInput;
   private EditText timeInput;
   private Calendar aggregateCalendar;
+  private FirebaseDatabase database = FirebaseDatabase.getInstance();
+  private DatabaseReference myRef = database.getReference();
 
   private boolean validateInput (String name, String date, String time) {
     if (TextUtils.isEmpty(name)) {
@@ -103,12 +108,14 @@ public class CreateTaskActivity extends AppCompatActivity
     String name = nameInput.getText().toString();
     String date = dateInput.getText().toString();
     String time = timeInput.getText().toString();
+    String uniqueId = myRef.push().getKey();
 
     if (validateInput(name, date, time)) {
-      Task task = new Task(name, aggregateCalendar);
+      Task task = new Task(name, aggregateCalendar, uniqueId);
       Intent intent = new Intent(this, MainActivity.class);
       intent.putExtra("CREATED_TASK", task);
       setResult(200, intent);
+      myRef.child("Groups").child("groupeOne").child("Tasks").child(task.getId()).setValue(task);
       finish();
     }
   }
