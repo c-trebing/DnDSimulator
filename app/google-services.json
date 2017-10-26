@@ -15,7 +15,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "633026469079-cdud56vecqm8e3ad8vgl7j4pmbpldoi0.apps.googleusercontent.com",
+          "client_id": "633026469079-2cmm3gu631ousgdndllmdg9nldkmen35.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.android.application",
@@ -58,6 +58,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "633026469079-puinedo0g389dqtu0mtro4cc1u0lbiom.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.powerrangers.todo",
+            "certificate_hash": "282e999e9d736ff44d1c802b6567e2f5742e8f0e"
+          }
+        },
         {
           "client_id": "633026469079-th8f8b5ett643te0cddkaqm0rk4n49ab.apps.googleusercontent.com",
           "client_type": 1,
