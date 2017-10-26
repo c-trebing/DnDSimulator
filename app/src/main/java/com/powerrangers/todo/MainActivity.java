@@ -60,17 +60,14 @@ public class MainActivity extends AppCompatActivity
   List<Calendar> listDataHeaders;
   HashMap<Calendar, List<Task>> listDataChildren;
   FirebaseDatabase database = FirebaseDatabase.getInstance();
-<<<<<<< HEAD
   NotificationCompat.Builder notificationBuilder;
 
   AlarmManager alarmManager;
   Intent alarmIntent;
   PendingIntent alarmPendingIntent;
-=======
   DatabaseReference myRef = database.getReference();
   String uniqueId;
 
->>>>>>> andrewBranch
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -82,13 +79,11 @@ public class MainActivity extends AppCompatActivity
     listView = (ExpandableListView) findViewById(R.id.task_list);
     listView.setAdapter(listAdaptor);
 
-<<<<<<< HEAD
     setupAlarms();
     setupXmlElements();
     setupTaskDisplay();
 
     prepareMockData();
-=======
     myRef.child("Groups").child("groupeOne").child("Tasks").addValueEventListener(new ValueEventListener() {
       @Override
       public void onDataChange(DataSnapshot dataSnapshot) {
@@ -125,7 +120,6 @@ public class MainActivity extends AppCompatActivity
       tasks.add( diffTask );
       updateDisplayedTasks(diffTask);
     }
->>>>>>> andrewBranch
   }
 
   @Override
@@ -277,11 +271,8 @@ public class MainActivity extends AppCompatActivity
 
   private void addTask (Task task) {
     tasks.add( task );
-<<<<<<< HEAD
     updateDisplayedTasks(task);
     createAlarm( task.calendar );
-=======
->>>>>>> andrewBranch
 
     /** Update Firebase with new information upon addTask**/
     //so it's easier to read the calender
