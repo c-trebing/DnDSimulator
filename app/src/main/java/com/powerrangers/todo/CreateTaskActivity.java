@@ -93,6 +93,8 @@ public class CreateTaskActivity extends AppCompatActivity
 
     aggregateCalendar.set(Calendar.HOUR_OF_DAY, hour);
     aggregateCalendar.set(Calendar.MINUTE, minute);
+    aggregateCalendar.set(Calendar.SECOND, 0);
+    aggregateCalendar.set(Calendar.MILLISECOND, 0);
 
     timeInput.setText(formattedTime);
   }
