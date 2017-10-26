@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity
   implements NavigationView.OnNavigationItemSelectedListener {
 
   ArrayList<Task> tasks;
+  ArrayList<Group> groups;
 
   MyExpandableListAdapter listAdaptor;
   ExpandableListView listView;
@@ -89,6 +90,12 @@ public class MainActivity extends AppCompatActivity
         deleteTask(oldTask);
       }
     }
+    if (requestCode == 102) {
+      if (resultCode == 203) {
+        Group group = (Group) intent.getSerializableExtra("CREATED_GROUP");
+        addGroup(group);
+      }
+    }
   }
 
   @Override
@@ -119,7 +126,7 @@ public class MainActivity extends AppCompatActivity
     //noinspection SimplifiableIfStatement
     if (id == R.id.action_settings) {
       Intent intent = new Intent(this, SettingsActivity.class);
-      startActivity(intent);
+      startActivityForResult(intent, 102);
       return true;
     }
 
@@ -132,8 +139,10 @@ public class MainActivity extends AppCompatActivity
     // Handle navigation view item clicks here.
     int id = item.getItemId();
 
-    if (id == R.id.nav_camera) {
-        // Handle the camera action
+    if (id == R.id.create_group) {
+        Intent intent = new Intent(this, CreateGroupActivity.class);
+        this.startActivity(intent);
+        return true;
     } else if (id == R.id.nav_gallery) {
 
     } else if (id == R.id.nav_slideshow) {
@@ -164,7 +173,7 @@ public class MainActivity extends AppCompatActivity
   private void setupXmlElements () {
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
-
+    // create task
     FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.create_fab);
     fab.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -191,6 +200,10 @@ public class MainActivity extends AppCompatActivity
       if (list.get(i).id.equals(task.id)) { return i; }
     }
     return -1;
+  }
+
+  private void addGroup(Group group) {
+    groups.add(group);
   }
 
   private void addTask (Task task) {
