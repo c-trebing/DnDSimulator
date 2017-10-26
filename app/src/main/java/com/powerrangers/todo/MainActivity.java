@@ -43,21 +43,26 @@ public class MainActivity extends AppCompatActivity
   implements NavigationView.OnNavigationItemSelectedListener {
 
   ArrayList<Task> tasks;
+  ArrayList<Group> groups;
 
   MyExpandableListAdapter listAdaptor;
   ExpandableListView listView;
   List<Calendar> listDataHeaders;
   HashMap<Calendar, List<Task>> listDataChildren;
   FirebaseDatabase database = FirebaseDatabase.getInstance();
+
   NotificationCompat.Builder notificationBuilder;
 
   AlarmManager alarmManager;
   Intent alarmIntent;
   PendingIntent alarmPendingIntent;
+
+
   DatabaseReference myRef = database.getReference();
   String uniqueId;
   private FirebaseAuth mAuth;
   private static final String TAG = "Main_Activity";
+
 
 
   @Override
@@ -69,6 +74,7 @@ public class MainActivity extends AppCompatActivity
     listAdaptor = new MyExpandableListAdapter(this, listDataHeaders, listDataChildren);
     listView = (ExpandableListView) findViewById(R.id.task_list);
     listView.setAdapter(listAdaptor);
+
 
     setupAlarms();
     setupXmlElements();
@@ -145,6 +151,12 @@ public class MainActivity extends AppCompatActivity
         deleteTask(oldTask);
       }
     }
+    if (requestCode == 102) {
+      if (resultCode == 203) {
+        Group group = (Group) intent.getSerializableExtra("CREATED_GROUP");
+        addGroup(group);
+      }
+    }
   }
 
   @Override
@@ -175,7 +187,7 @@ public class MainActivity extends AppCompatActivity
     //noinspection SimplifiableIfStatement
     if (id == R.id.action_settings) {
       Intent intent = new Intent(this, SettingsActivity.class);
-      startActivity(intent);
+      startActivityForResult(intent, 102);
       return true;
     }
 
@@ -188,17 +200,11 @@ public class MainActivity extends AppCompatActivity
     // Handle navigation view item clicks here.
     int id = item.getItemId();
 
-    if (id == R.id.nav_camera) {
-        // Handle the camera action
-    } else if (id == R.id.nav_gallery) {
-
-    } else if (id == R.id.nav_slideshow) {
-
-    } else if (id == R.id.nav_manage) {
-
-    } else if (id == R.id.nav_share) {
-
-    } else if (id == R.id.nav_send) {
+    if (id == R.id.create_group) {
+        Intent intent = new Intent(this, CreateGroupActivity.class);
+        this.startActivity(intent);
+        return true;
+    } else if (id == R.id.demo_group_name) {
 
     } else if (id == R.id.nav_logout) {
 			Log.d(TAG, "Logging out");
@@ -235,17 +241,15 @@ public class MainActivity extends AppCompatActivity
   private void setupXmlElements () {
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
-
+    // create task
     FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.create_fab);
     fab.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            // Snackbar.make(view, "Replace this text with a tray of buttons...", Snackbar.LENGTH_LONG)
-            //         .setAction("Action", null).show();
-            Context context = view.getContext();
-            Intent intent = new Intent(context, CreateTaskActivity.class);
-            startActivityForResult(intent, 100);
-        }
+      @Override
+      public void onClick(View view) {
+        Context context = view.getContext();
+        Intent intent = new Intent(context, CreateTaskActivity.class);
+        startActivityForResult(intent, 100);
+      }
     });
 
     DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -264,6 +268,10 @@ public class MainActivity extends AppCompatActivity
       if (list.get(i).id.equals(task.id)) { return i; }
     }
     return -1;
+  }
+
+  private void addGroup(Group group) {
+    groups.add(group);
   }
 
   private void addTask (Task task) {
@@ -351,5 +359,9 @@ public class MainActivity extends AppCompatActivity
       String tempId = myRef.push().getKey();
       addTask( new Task("problem " + i, tomorrow,tempId) );
     }
+    String tempId = myRef.push().getKey();
+    addTask( new Task("panic about tomorrow", today, tempId) );
+
+    //addGroup(new Group("Power Rangers", "This is the Power Rangers group."));  // for demo
   }
   }

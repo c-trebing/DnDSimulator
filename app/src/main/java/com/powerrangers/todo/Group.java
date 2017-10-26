@@ -1,15 +1,19 @@
 package com.powerrangers.todo;
 
+import android.view.View;
+import android.widget.EditText;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.UUID;
 
 
-public class Group {
+public class Group implements Serializable {
     public String group_name;
     public String group_owner;  // change to User type
     public UUID group_id;
-    public ArrayList<UUID> group_members;  // will be changed to some collection of User type
-    public ArrayList<Task> group_tasks;  // will be changed to some collection of Task type
+    public ArrayList<UUID> group_members;
+    public ArrayList<Task> group_tasks;
 
     public Group (String name, String owner){
         group_name = name;

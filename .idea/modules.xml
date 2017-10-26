@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://D:\Users\Documents\GitHub\New folder\DnDSimulator.iml" filepath="D:\Users\Documents\GitHub\New folder\DnDSimulator.iml" />
       <module fileurl="file://$PROJECT_DIR$/New folder.iml" filepath="$PROJECT_DIR$/New folder.iml" />
-      <module fileurl="file://D:\github Stuff\DnDSimulator\ToDo.iml" filepath="D:\github Stuff\DnDSimulator\ToDo.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
