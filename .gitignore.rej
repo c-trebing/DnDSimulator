@@ -1,0 +1,8 @@
+diff a/.gitignore b/.gitignore	(rejected hunks)
+@@ -7,3 +7,6 @@
+ /build
+ /captures
+ .externalNativeBuild
++.idea/dictionaries/jmkzp.xml
++.idea/codeStyleSettings.xml
++.idea/modules.xml
