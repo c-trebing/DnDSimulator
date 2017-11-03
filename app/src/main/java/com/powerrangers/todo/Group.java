@@ -7,11 +7,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import com.google.firebase.messaging.FirebaseMessaging;
+
 
 public class Group implements Serializable {
     public String group_name;
     public String group_owner;  // change to User type
     public UUID group_id;
+    public String group_idString;
     public ArrayList<UUID> group_members;
     public ArrayList<Task> group_tasks;
 
@@ -19,6 +22,7 @@ public class Group implements Serializable {
         group_name = name;
         group_owner = owner;
         group_id  = UUID.randomUUID();
+        group_idString = group_id.toString();
     }
 
     public boolean addTask(Task t){ // future: add to firebase
@@ -63,6 +67,7 @@ public class Group implements Serializable {
         }
         else{
             group_members.add(id);
+            FirebaseMessaging.getInstance().subscribeToTopic(group_idString);
             return true;
         }
     }
@@ -70,6 +75,7 @@ public class Group implements Serializable {
     public boolean removeMember(UUID id){ // future: remove from firebase
         if(group_members.contains(id)){
             group_members.remove(id);
+            FirebaseMessaging.getInstance().unsubscribeFromTopic(group_idString);
             return true;
         }
         else{
